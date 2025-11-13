@@ -70,26 +70,21 @@
 
 ---
 
-## Phase 4: Security & Monitoring (Week 7-8)
+## Phase 4: Security & Deployment (Week 7-8)
 
 ### 📋 Planned
-- [ ] **Monitoring & Analytics**
-  - Anonymous usage tracking (opt-in)
-  - Connection success metrics
-  - Error reporting
-  - **Estimated**: 3-4 days
-
 - [ ] **Security Hardening**
   - Content Security Policy
   - Rate limiting
   - Input validation
+  - XSS prevention
   - **Estimated**: 2-3 days
 
 - [ ] **Deployment Infrastructure**
-  - CI/CD pipeline
+  - CI/CD pipeline (GitHub Actions)
+  - Cloudflare Pages auto-deploy
   - Environment configuration
-  - Backup systems
-  - **Estimated**: 3-4 days
+  - **Estimated**: 2-3 days
 
 ---
 
