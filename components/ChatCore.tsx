@@ -4,8 +4,10 @@ import { useEffect, useState } from "react";
 import { getMessages, storeMessage } from "@/lib/storage";
 import { initPeer, connectToPeer, sendToAll, destroy } from "@/lib/peer-manager";
 import { inviteManager } from "@/lib/invite-manager";
+import { isIOSPWA, isMobile, requestWakeLock, ensureHTTPS } from "@/lib/mobile-utils";
 import Settings from "./Settings";
 import ErrorHandler from "./ErrorHandler";
+import Diagnostics from "./Diagnostics";
 
 interface ChatCoreProps {
   invitePeerId: string | null;
@@ -28,9 +30,14 @@ export default function ChatCore({ invitePeerId }: ChatCoreProps) {
   const [linkCreated, setLinkCreated] = useState(false);
   const [messageQueue, setMessageQueue] = useState<string[]>([]);
   const [showSettings, setShowSettings] = useState(false);
+  const [showDiagnostics, setShowDiagnostics] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
+    if (isMobile()) {
+      ensureHTTPS();
+      requestWakeLock();
+    }
     const handleMessage = (fromPeerId: string, data: string) => {
       console.log('[CHAT] Received message:', data, 'from:', fromPeerId);
       storeMessage({ text: data, peerId: fromPeerId, isSelf: false });
@@ -111,6 +118,7 @@ export default function ChatCore({ invitePeerId }: ChatCoreProps) {
   return (
     <div style={{ height: "100vh", display: "flex", flexDirection: "column" }}>
       {showSettings && <Settings onClose={() => setShowSettings(false)} />}
+      {showDiagnostics && <Diagnostics onClose={() => setShowDiagnostics(false)} />}
       <ErrorHandler error={error} onRetry={handleRetry} onDismiss={() => setError(null)} />
       <div style={{ padding: 16, borderBottom: "1px solid #333", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
         <div>
@@ -118,21 +126,38 @@ export default function ChatCore({ invitePeerId }: ChatCoreProps) {
             Your ID: {peerId.slice(0, 8)}...
           </div>
         </div>
-        <button
-          onClick={() => setShowSettings(true)}
-          style={{
-            padding: '4px 8px',
-            background: '#333',
-            border: 'none',
-            borderRadius: 6,
-            color: '#fff',
-            fontSize: 10,
-            cursor: 'pointer',
-            opacity: 0.7
-          }}
-        >
-          Settings
-        </button>
+        <div style={{ display: 'flex', gap: 4 }}>
+          <button
+            onClick={() => setShowDiagnostics(true)}
+            style={{
+              padding: '4px 8px',
+              background: '#333',
+              border: 'none',
+              borderRadius: 6,
+              color: '#fff',
+              fontSize: 10,
+              cursor: 'pointer',
+              opacity: 0.7
+            }}
+          >
+            Diagnostics
+          </button>
+          <button
+            onClick={() => setShowSettings(true)}
+            style={{
+              padding: '4px 8px',
+              background: '#333',
+              border: 'none',
+              borderRadius: 6,
+              color: '#fff',
+              fontSize: 10,
+              cursor: 'pointer',
+              opacity: 0.7
+            }}
+          >
+            Settings
+          </button>
+        </div>
       </div>
       <div style={{ padding: "0 16px 16px" }}>
         <div style={{ fontSize: 10, marginTop: 4, color: connected ? '#0f0' : connecting ? '#ff0' : '#f00' }}>
