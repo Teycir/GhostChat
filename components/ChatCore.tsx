@@ -5,6 +5,8 @@ import { getMessages, storeMessage } from "@/lib/storage";
 import { initPeer, connectToPeer, sendToAll, destroy } from "@/lib/peer-manager";
 import { inviteManager } from "@/lib/invite-manager";
 import { isIOSPWA, isMobile, requestWakeLock, ensureHTTPS } from "@/lib/mobile-utils";
+import { checkRateLimit } from "@/lib/rate-limiter";
+import { validateMessage } from "@/lib/input-validation";
 import Settings from "./Settings";
 import ErrorHandler from "./ErrorHandler";
 import Diagnostics from "./Diagnostics";
@@ -97,6 +99,17 @@ export default function ChatCore({ invitePeerId }: ChatCoreProps) {
 
   const sendMessage = () => {
     if (!input.trim()) return;
+    
+    const validation = validateMessage(input);
+    if (!validation.valid) {
+      setError(validation.error || 'Invalid message');
+      return;
+    }
+    
+    if (!checkRateLimit('messages', 10, 10000)) {
+      setError('Sending too fast. Wait a moment.');
+      return;
+    }
 
     storeMessage({ text: input, peerId, isSelf: true });
     setMessages([...getMessages()]);
