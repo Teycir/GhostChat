@@ -14,6 +14,7 @@ A free, open-source Progressive Web App for true peer-to-peer private chatting w
 - **Cross-Platform**: Works on desktop, mobile, and tablets (any modern browser)
 - **Installable**: PWA can be installed like a native app
 - **Memory-Only**: Messages stored in RAM only, disappear when tab closes (zero disk traces)
+- **SEO Optimized**: Next.js with meta tags, Open Graph, Twitter Cards for viral growth
 
 ### Target Users
 
@@ -27,6 +28,7 @@ Privacy enthusiasts seeking secure alternatives to centralized chat apps. Initia
 - **Lower Friction**: Share URL vs "install extension" (better for viral mechanics)
 - **Cross-Browser**: Works on Chrome, Firefox, Safari, Edge
 - **PWA Install**: Can still be "installed" to home screen/desktop
+- **SEO**: Next.js enables search engine optimization for organic discovery
 
 ### Honest Limitations
 
@@ -37,9 +39,13 @@ Privacy enthusiasts seeking secure alternatives to centralized chat apps. Initia
 
 ## Technology Stack
 
-Minimal TypeScript setup optimized for PWA deployment:
+Next.js setup optimized for SEO, PWA, and free deployment:
 
-- **Core**: TypeScript + Vite (fast builds, optimized PWA bundling)
+- **Core**: Next.js 15 (App Router) + TypeScript
+  - Static export for PWA deployment
+  - Built-in SEO optimization (meta tags, sitemaps, Open Graph)
+  - Server Components for landing pages
+  - Client Components for P2P chat
 - **P2P Layers**:
   - **WebRTC**: Direct peer-to-peer connections for real-time messaging
   - **Gun.js**: Signaling and peer discovery (bootstrap only)
@@ -48,7 +54,15 @@ Minimal TypeScript setup optimized for PWA deployment:
 - **NAT Traversal**: Free STUN servers (Google/Mozilla) + optional TURN fallback
 - **UI**: React + PWA APIs (service worker, manifest, notifications)
 - **Storage**: Memory-only (RAM) with auto-clear on close
+- **Deployment**: Static export to Cloudflare Pages (free tier, unlimited bandwidth)
 - **Testing**: Local multi-tab testing with real WebRTC connections
+
+### Why Next.js?
+- **SEO**: Meta tags, Open Graph, Twitter Cards (critical for viral growth)
+- **Performance**: Automatic code splitting, image optimization
+- **Free Deployment**: Cloudflare Pages free tier (unlimited bandwidth)
+- **Static Export**: `next build && next export` generates static PWA (no server needed)
+- **Developer Experience**: Fast refresh, TypeScript support, easy routing
 
 ### Post-MVP Additions
 - Libp2p for DHT-based discovery (remove Gun.js dependency)
@@ -64,14 +78,13 @@ npm install
 
 # Development server
 npm run dev
+# Open http://localhost:3000
 
-# Build for production
+# Build static export (PWA)
 npm run build
+# Generates /out directory
 
-# Preview production build
-npm run preview
-
-# Deploy (Netlify/Vercel/GitHub Pages)
+# Deploy to Cloudflare Pages
 npm run deploy
 ```
 
@@ -79,29 +92,32 @@ npm run deploy
 
 ```
 privypeer/
-├── src/
-│   ├── components/          # React components
-│   │   ├── ChatCore.tsx     # Messaging interface
-│   │   ├── InviteHub.tsx    # Invite generation UI
-│   │   ├── DiscoveryRoom.tsx # Public room for cold start
-│   │   └── InstallPrompt.tsx # PWA install banner
-│   ├── lib/                 # Core logic
-│   │   ├── webrtc.ts        # WebRTC peer connection management
-│   │   ├── signaling.ts     # Gun.js signaling for peer discovery
-│   │   ├── crypto.ts        # E2E encryption (Gun SEA + WebRTC)
-│   │   ├── identity.ts      # Key management and backup
-│   │   ├── propagation.ts   # Share tracking and rewards
-│   │   ├── storage.ts       # localStorage with auto-cleanup
-│   │   └── rateLimit.ts     # Spam prevention
-│   ├── workers/             # Service worker
-│   │   └── sw.ts            # PWA service worker (caching only)
-│   ├── App.tsx              # Main app component
-│   └── main.tsx             # Entry point
+├── app/
+│   ├── layout.tsx           # Root layout with SEO meta tags
+│   ├── page.tsx             # Landing page (Server Component)
+│   ├── chat/
+│   │   └── page.tsx         # Chat page (Client Component)
+│   ├── invite/[id]/
+│   │   └── page.tsx         # Invite page with dynamic OG images
+│   └── api/                 # API routes (optional)
+├── components/              # React components
+│   ├── ChatCore.tsx         # Messaging interface (Client)
+│   ├── InviteHub.tsx        # Invite generation UI
+│   ├── DiscoveryRoom.tsx    # Public room for cold start
+│   └── InstallPrompt.tsx    # PWA install banner
+├── lib/                     # Core logic
+│   ├── webrtc.ts            # WebRTC peer connection management
+│   ├── signaling.ts         # Gun.js signaling for peer discovery
+│   ├── crypto.ts            # E2E encryption (Gun SEA + WebRTC)
+│   ├── identity.ts          # Key management and backup
+│   ├── propagation.ts       # Share tracking and rewards
+│   ├── storage.ts           # Memory-only storage
+│   └── rateLimit.ts         # Spam prevention
 ├── public/
 │   ├── manifest.json        # PWA manifest
-│   ├── sw.js                # Compiled service worker
-│   └── assets/              # Icons (192x192, 512x512)
-├── vite.config.ts           # Vite + PWA plugin config
+│   ├── sw.js                # Service worker
+│   └── icons/               # PWA icons (192x192, 512x512)
+├── next.config.js           # Next.js config (static export)
 ├── tsconfig.json
 └── package.json
 ```
@@ -109,13 +125,14 @@ privypeer/
 ## Roadmap
 
 ### Phase 1: Foundation (Week 1)
-- Vite + React + PWA manifest
+- Next.js setup with static export
+- Landing page with SEO optimization (meta tags, Open Graph)
+- PWA manifest and service worker
 - Gun.js setup with community relay peers
 - Basic chat UI (local only, no P2P yet)
 - Ephemeral identity generation (random per session)
 - Memory-only message storage
 - Privacy UI (blur on inactive, auto-clear)
-- PWA install prompt
 
 ### Phase 2: P2P Core (Weeks 2-3)
 - WebRTC peer connection setup with simple-peer
@@ -127,6 +144,7 @@ privypeer/
 
 ### Phase 3: Viral Features (Week 4-5)
 - Invite link generation with QR codes
+- Dynamic OG images for invite pages (SEO)
 - Local propagation tracking (share counter)
 - Public discovery room for cold start
 - Basic badge system (5+ shares unlock)
@@ -136,9 +154,10 @@ privypeer/
 ### Phase 4: Polish & Deploy (Week 6)
 - UI refinements and error handling
 - Key backup/recovery flow
-- Deploy to Netlify/Vercel
+- Deploy to Cloudflare Pages
 - Custom domain setup
 - Mobile testing and optimization
+- SEO audit and optimization
 
 **Realistic Target**: Functional MVP by Week 6-8
 
@@ -147,7 +166,7 @@ privypeer/
 **True P2P Model**: Direct WebRTC connections with Gun.js for signaling only.
 
 **Flow**: 
-1. User visits URL → PWA loads → Generates identity keypair (local only)
+1. User visits URL → Next.js PWA loads → Generates identity keypair (local only)
 2. Connects to Gun relay for signaling (temporary, bootstrap only)
 3. Joins public discovery room OR uses invite link
 4. Exchanges WebRTC offer/answer via Gun signaling
@@ -165,7 +184,7 @@ privypeer/
 - **NAT Traversal**: STUN servers reveal public IP, TURN fallback if needed
 
 **Infrastructure Needs**:
-- Static hosting (Netlify/Vercel/GitHub Pages - free tier)
+- Static hosting (Cloudflare Pages - free tier, unlimited bandwidth)
 - Community-run Gun relay peers (signaling only, minimal bandwidth)
 - Public STUN servers (Google/Mozilla free tier)
 - Optional TURN servers for ~15-20% of users behind symmetric NAT
@@ -176,6 +195,7 @@ privypeer/
 - After connection, peers communicate directly (no relay in message path)
 - Memory-only storage leaves zero disk traces
 - Ephemeral identities prevent cross-session tracking
+- Next.js SEO enables organic discovery
 - PWA works on all devices, increasing viral potential
 - Static hosting = zero server costs
 
@@ -198,13 +218,14 @@ npm install
 ```bash
 # Development build with HMR
 npm run dev
-# Open http://localhost:5173
+# Open http://localhost:3000
 
-# Production build
+# Production build (static export)
 npm run build
+# Generates /out directory with static files
 
 # Preview production build locally
-npm run preview
+npx serve out
 ```
 
 ### Testing
@@ -212,13 +233,13 @@ npm run preview
 ```bash
 # Multi-peer local testing
 # 1. Start dev server: npm run dev
-# 2. Open http://localhost:5173 in tab 1
-# 3. Open http://localhost:5173 in tab 2 (or different browser)
+# 2. Open http://localhost:3000 in tab 1
+# 3. Open http://localhost:3000 in tab 2 (or different browser)
 # 4. Test message sync between tabs
 
 # Mobile testing
 # 1. Get local IP: ifconfig (Unix) or ipconfig (Windows)
-# 2. Access from phone: http://YOUR_IP:5173
+# 2. Access from phone: http://YOUR_IP:3000
 # 3. Test P2P between desktop and mobile
 
 # Note: Local testing doesn't simulate real NAT scenarios
@@ -228,17 +249,18 @@ npm run preview
 ### Deployment
 
 ```bash
-# GitHub Pages (recommended - truly free)
+# Cloudflare Pages (recommended - free unlimited)
 npm run build
-gh-pages -d dist
+wrangler pages deploy out
+# Or connect GitHub repo to Cloudflare Pages dashboard
 
-# Cloudflare Pages (alternative to GitHub Pages)
+# GitHub Pages (alternative)
 npm run build
-wrangler pages publish dist
+gh-pages -d out
 
 # Tor Hidden Service (censorship-resistant backup)
 npm run build
-# 1. Copy dist/ to server
+# 1. Copy out/ to server
 # 2. Configure nginx to serve static files
 # 3. Configure Tor hidden service
 # 4. Access via .onion address
@@ -399,26 +421,29 @@ We welcome contributions! This is a community-driven project focused on privacy 
 
 **Primary Distribution**: Web URL (PWA)
 - Deploy to: `privypeer.app` (or similar short domain)
-- Hosting: **GitHub Pages** (truly unlimited, free forever)
-- CDN: Cloudflare (free tier, unlimited bandwidth)
+- Hosting: **Cloudflare Pages** (free tier, unlimited bandwidth)
+- Built with: Next.js static export (SEO optimized)
 - Updates: Instant (no app store approval)
 
-**Why GitHub Pages + Cloudflare?**
-- GitHub Pages: Unlimited bandwidth, free custom domains, 100% uptime SLA
-- Cloudflare: Free CDN, DDoS protection, global edge network
-- Zero cost at any scale (even millions of users)
-- No bandwidth limits, no function invocation limits
-- Static files only = perfect for PWA
+**Why Cloudflare Pages?**
+- Unlimited bandwidth (truly free forever)
+- Unlimited requests (no function invocation limits)
+- Global CDN (300+ cities)
+- Free custom domains + SSL
+- Automatic deployments from Git
+- Built-in analytics (privacy-friendly)
+- DDoS protection included
+- Zero cost at any scale
 
 **Primary Hosting** (Free, Fast, Scalable):
 
-- **GitHub Pages + Cloudflare**:
-  - GitHub Pages: Unlimited bandwidth, free forever
-  - Cloudflare: Free CDN, DDoS protection, global edge
-  - Deploy: `gh-pages -d dist`
+- **Cloudflare Pages**:
+  - Unlimited bandwidth and requests
+  - Deploy: `wrangler pages deploy out`
   - Custom domain: `privypeer.app` via Cloudflare DNS
   - Cost: $0 at any scale (even millions of users)
-  - Limitation: Can be taken down by GitHub/DMCA
+  - SEO: Next.js meta tags, Open Graph, sitemaps
+  - Limitation: Can be taken down by Cloudflare ToS
 
 **Censorship-Resistant Backup** (If Primary Goes Down):
 
@@ -430,7 +455,7 @@ We welcome contributions! This is a community-driven project focused on privacy 
   - Community can run multiple mirrors
 
 **Why This Works**:
-- Primary (GitHub + Cloudflare): Fast, free, 99.9% uptime
+- Primary (Cloudflare Pages): Fast, free, 99.9% uptime, SEO optimized
 - Backup (Tor): Unstoppable, anonymous, censorship-proof
 - Open source: Community can always re-host
 - Static PWA: Easy to deploy anywhere
@@ -451,6 +476,7 @@ We welcome contributions! This is a community-driven project focused on privacy 
 - Short URLs: `privypeer.app/i/x7k2` (easy to share)
 - QR codes: Instant mobile sharing
 - Deep links: Open directly in PWA if installed
+- Dynamic OG images: Preview cards on social media
 - Expiry: 24 hours (creates urgency)
 
 **3. Web Share API**
@@ -481,17 +507,19 @@ await navigator.share({
 - Share-to-unlock drives 1:0.5 ratio (50 shares per 100 users)
 - Public discovery room for cold start
 - Community-run Gun relays
+- SEO: Organic search traffic from Next.js optimization
 
 **Phase 3: Viral Growth (Month 3-6)** - Target: 10K+ users
 - Network effects kick in
 - Mobile sharing (PWA on phones)
 - Organic social media mentions
 - Privacy news coverage
+- Search engine visibility
 
 **Realistic Projections**:
 - Week 1: 100 users (manual seeding)
 - Month 1: 500 users (1:0.5 share ratio)
-- Month 3: 2K users (compounding)
+- Month 3: 2K users (compounding + SEO)
 - Month 6: 10K users (viral threshold)
 
 ### Marketing Angles
@@ -526,6 +554,7 @@ await navigator.share({
 - HN front page (Show HN)
 - Tech blogs (privacy-focused)
 - YouTube reviews (tech channels)
+- Search engines (Next.js SEO)
 
 **Viral**:
 - Invite links (primary growth driver)
@@ -538,13 +567,13 @@ await navigator.share({
 **Technical Risks**:
 - Gun relay downtime → Deploy backup relays
 - NAT traversal failures → TURN server fallback
-- Hosting costs → GitHub Pages + Cloudflare = free forever
-- Bandwidth limits → None (GitHub Pages + Cloudflare have no limits)
+- Hosting costs → Cloudflare Pages = free forever
+- Bandwidth limits → None (Cloudflare Pages has no limits)
 - Censorship → Tor backup + community mirrors (unstoppable)
 - Takedown requests → Open source = community can always re-host
 
 **Growth Risks**:
-- Slow adoption → Aggressive share-to-unlock
+- Slow adoption → Aggressive share-to-unlock + SEO
 - Spam perception → Rate limit shares (max 5/day)
 - Cold start problem → Public discovery room
 
@@ -565,6 +594,7 @@ await navigator.share({
 - 0.5+ share ratio sustained
 - 100+ concurrent P2P connections
 - Featured on privacy blogs
+- Organic search traffic
 
 **Month 6-12**:
 - 10K+ total users
@@ -605,9 +635,9 @@ MIT License (open source, permissive)
 
 **Status**: Pre-MVP Development  
 **Realistic Timeline**: 6-8 weeks to functional MVP  
-**Deployment**: GitHub Pages + Cloudflare (primary) + Tor (backup)  
+**Deployment**: Cloudflare Pages (primary) + Tor (backup)  
 **Distribution**: Web URL (PWA) - no app stores needed  
-**Growth Model**: Viral sharing with 1:0.5 ratio target  
+**Growth Model**: Viral sharing + SEO with 1:0.5 ratio target  
 **Censorship Resistance**: Decentralized hosting, unstoppable  
 **Community**: [Coming Soon]
 
@@ -635,16 +665,16 @@ A: Yes! PWA works on all modern mobile browsers. Install to home screen for app-
 A: Yes, for active connections. Installing as PWA helps with persistence. Future extension wrapper will add background support.
 
 **Q: How much does it cost to run?**  
-A: Zero. GitHub Pages + Cloudflare are free forever (no bandwidth limits), STUN servers are free, Gun relays are community-run.
+A: Zero. Cloudflare Pages is free forever (unlimited bandwidth), STUN servers are free, Gun relays are community-run.
 
-**Q: What if GitHub Pages goes down?**  
-A: Tor backup is always available. Static PWA can also be hosted on Cloudflare Pages, any web server, or community mirrors. Open source = unstoppable.
+**Q: What if Cloudflare Pages goes down?**  
+A: Tor backup is always available. Static PWA can also be hosted on GitHub Pages, any web server, or community mirrors. Open source = unstoppable.
 
 **Q: Can PrivyPeer be censored or taken down?**  
-A: Primary site (GitHub Pages) can be taken down. But Tor backup is censorship-proof, and community can re-host anywhere. Static PWA = easy to mirror.
+A: Primary site (Cloudflare Pages) can be taken down. But Tor backup is censorship-proof, and community can re-host anywhere. Static PWA = easy to mirror.
 
 **Q: How much does it cost to run?**  
-A: GitHub Pages + Cloudflare = $0 forever. Tor backup = $0 (community-run). No costs at any scale.
+A: Cloudflare Pages = $0 forever (unlimited bandwidth). Tor backup = $0 (community-run). No costs at any scale.
 
 **Q: Are messages stored permanently?**  
 A: No. Messages are stored in RAM only and disappear when you close the tab. Zero disk traces.
