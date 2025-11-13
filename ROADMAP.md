@@ -59,20 +59,14 @@
 
 ---
 
-## Phase 3: Scalability (Week 5-6)
+## Phase 3: PeerJS Cloud API (Week 5-6)
 
 ### 📋 Planned
-- [ ] **Self-Hosted Signaling**
-  - Docker container for PeerJS server
-  - Deployment documentation
-  - Health monitoring
-  - **Estimated**: 3-4 days
-
-- [ ] **Group Chat (Mesh Network)**
-  - Multi-peer connections
-  - Presence announcements
-  - Broadcast messaging
-  - **Estimated**: 5-7 days
+- [ ] **PeerJS Cloud API Key Support**
+  - Free API key registration guide
+  - BYOK (Bring Your Own Key) configuration
+  - Rate limit handling
+  - **Estimated**: 1-2 days
 
 - [ ] **Performance Optimizations**
   - Message compression

@@ -6,21 +6,24 @@ const connections = new Map<string, DataConnection>();
 
 function getPeerConfig() {
   const customHost = localStorage.getItem('peerjs_host');
-  const customPort = localStorage.getItem('peerjs_port');
-  const customPath = localStorage.getItem('peerjs_path');
-  const customKey = localStorage.getItem('peerjs_key');
   
   if (customHost) {
+    const port = localStorage.getItem('peerjs_port');
+    const path = localStorage.getItem('peerjs_path');
     return {
       host: customHost,
-      port: customPort ? parseInt(customPort) : 443,
-      path: customPath || '/',
-      key: customKey || 'peerjs',
+      port: port ? parseInt(port) : 443,
+      path: path || '/',
       secure: true
     };
   }
   
-  return {};
+  return {
+    host: 'ghostchat-signaling.teycir.workers.dev',
+    port: 443,
+    path: '/',
+    secure: true
+  };
 }
 
 export function initPeer(roomId: string, onMessage: (peerId: string, data: string) => void, onConnect: () => void, onDisconnect?: () => void) {
@@ -114,25 +117,22 @@ export function destroy() {
   peer = null;
 }
 
-export function setPeerJSConfig(host: string, port: number, path: string, key: string) {
+export function setPeerJSConfig(host: string, port: number, path: string) {
   localStorage.setItem('peerjs_host', host);
   localStorage.setItem('peerjs_port', port.toString());
   localStorage.setItem('peerjs_path', path);
-  localStorage.setItem('peerjs_key', key);
 }
 
 export function clearPeerJSConfig() {
   localStorage.removeItem('peerjs_host');
   localStorage.removeItem('peerjs_port');
   localStorage.removeItem('peerjs_path');
-  localStorage.removeItem('peerjs_key');
 }
 
 export function getPeerJSConfig() {
   return {
-    host: localStorage.getItem('peerjs_host') || '0.peerjs.com (default)',
-    port: localStorage.getItem('peerjs_port') || '443',
-    path: localStorage.getItem('peerjs_path') || '/',
-    key: localStorage.getItem('peerjs_key') || 'peerjs'
+    host: localStorage.getItem('peerjs_host') || '',
+    port: localStorage.getItem('peerjs_port') || '',
+    path: localStorage.getItem('peerjs_path') || ''
   };
 }

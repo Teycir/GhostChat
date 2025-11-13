@@ -1,0 +1,14 @@
+{
+  "name": "ghostchat-signaling",
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "deploy": "wrangler deploy"
+  },
+  "dependencies": {
+    "peer": "^1.0.2"
+  },
+  "devDependencies": {
+    "wrangler": "^3.0.0"
+  }
+}

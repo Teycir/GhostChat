@@ -5,23 +5,21 @@ import { setPeerJSConfig, clearPeerJSConfig, getPeerJSConfig } from "@/lib/peer-
 
 export default function Settings({ onClose }: { onClose: () => void }) {
   const config = getPeerJSConfig();
-  const [host, setHost] = useState(config.host === '0.peerjs.com (default)' ? '' : config.host);
-  const [port, setPort] = useState(config.port === '443' ? '' : config.port);
-  const [path, setPath] = useState(config.path === '/' ? '' : config.path);
-  const [key, setKey] = useState(config.key === 'peerjs' ? '' : config.key);
+  const [host, setHost] = useState(config.host);
+  const [port, setPort] = useState(config.port);
+  const [path, setPath] = useState(config.path);
 
   const handleSave = () => {
-    if (host) {
+    if (host.trim()) {
       setPeerJSConfig(
-        host,
+        host.trim(),
         port ? parseInt(port) : 443,
-        path || '/',
-        key || 'peerjs'
+        path.trim() || '/'
       );
-      alert('Settings saved! Reload the page to apply changes.');
+      alert('Custom server saved! Reload to apply.');
     } else {
       clearPeerJSConfig();
-      alert('Using default PeerJS server. Reload the page to apply changes.');
+      alert('Using free public server (0.peerjs.com). Reload to apply.');
     }
     onClose();
   };
@@ -47,20 +45,20 @@ export default function Settings({ onClose }: { onClose: () => void }) {
         width: '90%',
         border: '1px solid #333'
       }}>
-        <h3 style={{ marginBottom: 16 }}>PeerJS Server Settings</h3>
+        <h3 style={{ marginBottom: 16 }}>PeerJS Server</h3>
         
         <div style={{ marginBottom: 12, fontSize: 12, opacity: 0.7 }}>
-          Leave empty to use default free server (0.peerjs.com)
+          Leave empty to use free public server (0.peerjs.com)
         </div>
 
         <div style={{ marginBottom: 12 }}>
           <label style={{ display: 'block', fontSize: 11, marginBottom: 4, opacity: 0.8 }}>
-            Host
+            Host (Optional)
           </label>
           <input
             value={host}
             onChange={(e) => setHost(e.target.value)}
-            placeholder="0.peerjs.com"
+            placeholder="your-server.glitch.me"
             style={{
               width: '100%',
               padding: 8,
@@ -75,7 +73,7 @@ export default function Settings({ onClose }: { onClose: () => void }) {
 
         <div style={{ marginBottom: 12 }}>
           <label style={{ display: 'block', fontSize: 11, marginBottom: 4, opacity: 0.8 }}>
-            Port
+            Port (Optional)
           </label>
           <input
             value={port}
@@ -93,34 +91,14 @@ export default function Settings({ onClose }: { onClose: () => void }) {
           />
         </div>
 
-        <div style={{ marginBottom: 12 }}>
+        <div style={{ marginBottom: 16 }}>
           <label style={{ display: 'block', fontSize: 11, marginBottom: 4, opacity: 0.8 }}>
-            Path
+            Path (Optional)
           </label>
           <input
             value={path}
             onChange={(e) => setPath(e.target.value)}
             placeholder="/"
-            style={{
-              width: '100%',
-              padding: 8,
-              background: '#111',
-              border: '1px solid #333',
-              borderRadius: 6,
-              color: '#fff',
-              fontSize: 12
-            }}
-          />
-        </div>
-
-        <div style={{ marginBottom: 16 }}>
-          <label style={{ display: 'block', fontSize: 11, marginBottom: 4, opacity: 0.8 }}>
-            API Key
-          </label>
-          <input
-            value={key}
-            onChange={(e) => setKey(e.target.value)}
-            placeholder="peerjs"
             style={{
               width: '100%',
               padding: 8,
