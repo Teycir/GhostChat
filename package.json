@@ -6,19 +6,32 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "export": "next export"
+    "export": "next export",
+    "test": "vitest",
+    "test:ui": "vitest --ui",
+    "test:e2e": "playwright test",
+    "test:e2e:ui": "playwright test --ui"
   },
   "dependencies": {
+    "gun": "^0.2020.1240",
     "next": "^15.0.0",
+    "peerjs": "^1.5.5",
     "react": "^18.3.0",
     "react-dom": "^18.3.0",
-    "gun": "^0.2020.1240",
     "simple-peer": "^9.11.1"
   },
   "devDependencies": {
+    "@playwright/test": "^1.56.1",
+    "@testing-library/jest-dom": "^6.9.1",
+    "@testing-library/react": "^16.3.0",
     "@types/node": "^20.0.0",
     "@types/react": "^18.3.0",
     "@types/react-dom": "^18.3.0",
-    "typescript": "^5.0.0"
+    "@types/simple-peer": "^9.11.9",
+    "@vitejs/plugin-react": "^5.1.1",
+    "@vitest/ui": "^2.1.9",
+    "jsdom": "^25.0.1",
+    "typescript": "^5.0.0",
+    "vitest": "^2.1.9"
   }
 }

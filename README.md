@@ -19,24 +19,25 @@ GhostChat is a truly private chat app where messages travel directly between you
 
 ### How to Use
 
-**Step 1: You open the app**
+**Step 1: Create a room**
 - Go to the website (e.g., `https://ghostchat.app`)
 - Click "Start Chatting"
-- You'll see a "Join a Room" screen
+- Click "Create Room"
+- You'll see a "Copy Invite Link" button
 
-**Step 2: Create a room**
-- Type any room name you want (e.g., "secret123", "coffee-chat", "team-meeting")
-- Click "Join Room"
-- You're now in the room, waiting for others
+**Step 2: Share the invite link**
+- Click "Copy Invite Link"
+- Share the link with your friend (via text, email, WhatsApp, etc.)
+- Example link: `https://ghostchat.app/chat?peer=abc123xyz`
 
 **Step 3: Your friend joins**
-- Tell your friend the room name (via phone, email, etc.)
-- They open the same website
-- They type the SAME room name
-- They click "Join Room"
+- They click your invite link
+- Opens directly in their browser
+- Automatically connects to you
+- No room names or codes needed!
 
 **Step 4: Chat directly**
-- Once both of you are in the same room, you're connected
+- Once connected, you'll see "Connected" status
 - Type messages and press Enter or click Send
 - Messages travel directly between you (peer-to-peer)
 - No servers can read your messages
@@ -44,6 +45,7 @@ GhostChat is a truly private chat app where messages travel directly between you
 **Step 5: End the chat**
 - Close the browser tab
 - All messages instantly disappear from memory
+- Invite link expires (can't be reused)
 - No history, no traces left behind
 
 **Important**: Both people must be online at the same time. If someone closes their tab, the connection ends.
@@ -70,22 +72,18 @@ GhostChat is a truly private chat app where messages travel directly between you
 
 **Two people chatting (Alice and Bob):**
 
-1. Alice opens GhostChat and creates room "coffee-talk"
-2. Alice texts Bob: "Join me on GhostChat, room: coffee-talk"
-3. Bob opens GhostChat and types "coffee-talk" in the room field
-4. Both are now connected directly (peer-to-peer)
-5. They chat privately - messages go directly between them
-6. When done, both close their tabs
-7. All messages vanish - no history exists anywhere
+1. Alice opens GhostChat and clicks "Create Room"
+2. Alice clicks "Copy Invite Link" and gets: `ghostchat.app/chat?peer=abc123`
+3. Alice texts Bob: "Join me on GhostChat: [paste link]"
+4. Bob clicks the link and automatically connects to Alice
+5. Both see "Connected" status
+6. They chat privately - messages go directly between them
+7. When done, both close their tabs
+8. All messages vanish - no history exists anywhere
 
-**Group chat (4 people):**
+**Multiple people (currently 1-to-1, group chat coming soon):**
 
-1. Alice creates room "team-meeting"
-2. Alice shares "team-meeting" with Bob, Carol, and Dave
-3. All 4 people join the same room name
-4. Everyone connects to everyone else (mesh network)
-5. Any message sent is seen by all 4 people instantly
-6. When anyone closes their tab, their messages disappear from their device
+Currently, GhostChat supports one-to-one conversations. Each invite link connects two people directly. For group chats, create multiple rooms or wait for the upcoming group chat feature!
 
 ### Limitations
 
@@ -93,7 +91,8 @@ GhostChat is a truly private chat app where messages travel directly between you
 - Both people need to be online at the same time
 - Your friend sees your IP address (use VPN to mask it)
 - Some strict firewalls may block connections
-- **Room name collisions**: If two separate groups use the same room name, they'll all be connected together. Use unique room names to avoid this
+- **Invite links expire**: Links only work while the creator's tab is open
+- **One-to-one only**: Currently supports 2 people per room (group chat coming soon)
 
 ---
 
@@ -110,8 +109,8 @@ npm run dev
 # Open http://localhost:3000
 
 # Test P2P
-# Tab 1: localhost:3000/chat -> Room: "test"
-# Tab 2: localhost:3000/chat -> Room: "test"
+# Tab 1: localhost:3000/chat -> Click "Create Room" -> Copy invite link
+# Tab 2: Paste the invite link (e.g., localhost:3000/chat?peer=abc123)
 # Send messages between tabs
 
 # Build for production
@@ -121,29 +120,28 @@ npm run build
 ### Tech Stack
 
 - **Next.js 15**: Static export, App Router, TypeScript
-- **WebRTC**: Direct P2P connections (simple-peer)
-- **Gun.js**: Signaling for peer discovery
+- **PeerJS**: Simple P2P connections with built-in signaling
 - **React**: UI components
-- **PWA**: Installable app (requires internet for P2P connections)
+- **PWA**: Installable app
 
 ### Architecture
 
 **How P2P Works**:
 
-1. **User joins room** → Gun.js announces presence
-2. **Peer discovery** → Gun.js exchanges WebRTC signals
-3. **Direct connection** → WebRTC establishes P2P link
-4. **Messages flow** → Direct peer-to-peer (Gun.js not involved)
-5. **Tab closes** → Everything wiped from memory
+1. **User creates room** → PeerJS generates unique peer ID
+2. **Invite link shared** → Contains peer ID in URL (`?peer=abc123`)
+3. **Friend clicks link** → Extracts peer ID from URL
+4. **Direct connection** → PeerJS establishes WebRTC P2P link
+5. **Messages flow** → Direct peer-to-peer (no server involved)
+6. **Tab closes** → Everything wiped from memory
 
 **Key Components**:
 
 ```
 lib/
-├── webrtc.ts       # WebRTC peer management
-├── signaling.ts    # Gun.js signaling
+├── peer-manager.ts # PeerJS P2P connections
 ├── storage.ts      # Memory-only storage
-└── identity.ts     # Ephemeral identity
+└── identity.ts     # Ephemeral identity (deprecated)
 
 components/
 └── ChatCore.tsx    # Main chat UI
@@ -155,16 +153,17 @@ app/
 
 **Data Flow**:
 
-- **Signaling**: Gun.js relay (WebRTC offer/answer only)
+- **Signaling**: PeerJS server (WebRTC offer/answer only)
+- **Peer Discovery**: Invite links with peer IDs in URL
 - **Messages**: Direct P2P via WebRTC data channels
 - **Storage**: RAM only, no disk writes
-- **Identity**: Random UUID per session
+- **Identity**: Random peer ID per session
 - **Encryption**: WebRTC native (DTLS/SRTP)
 
 **Infrastructure**:
 
 - Static hosting (Cloudflare Pages - free)
-- Community Gun.js relays (signaling only)
+- PeerJS cloud signaling (free tier available)
 - Public STUN servers (Google/Mozilla - free)
 - No backend servers needed
 
@@ -201,10 +200,10 @@ public/
 npm run dev
 
 # Browser Tab 1
-localhost:3000/chat -> Room: "test123"
+localhost:3000/chat -> Click "Create Room" -> Copy invite link
 
 # Browser Tab 2
-localhost:3000/chat -> Room: "test123"
+Paste invite link (e.g., localhost:3000/chat?peer=abc123xyz)
 
 # Send messages - they sync via WebRTC
 ```

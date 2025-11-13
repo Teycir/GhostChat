@@ -1,11 +1,19 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect, Suspense } from 'react'
 import ChatCore from '@/components/ChatCore'
+import { useSearchParams } from 'next/navigation'
 
-export default function Chat() {
-  const [roomId, setRoomId] = useState('')
+function ChatContent() {
+  const searchParams = useSearchParams()
+  const invitePeerId = searchParams.get('peer')
   const [joined, setJoined] = useState(false)
+
+  useEffect(() => {
+    if (invitePeerId) {
+      setJoined(true)
+    }
+  }, [invitePeerId])
 
   if (!joined) {
     return (
@@ -17,57 +25,45 @@ export default function Chat() {
           height={80} 
           style={{ margin: '0 auto 20px', display: 'block' }}
         />
-        <h2 style={{ marginBottom: 20 }}>Join a Room</h2>
-        <input
-          value={roomId}
-          onChange={(e) => setRoomId(e.target.value)}
-          onKeyPress={(e) => e.key === 'Enter' && roomId && setJoined(true)}
-          placeholder="Enter unique room name (e.g., alice-bob-jan15)..."
-          style={{
-            width: '100%',
-            padding: 12,
-            background: '#111',
-            border: '1px solid #333',
-            borderRadius: 8,
-            color: '#fff',
-            outline: 'none',
-            marginBottom: 16
-          }}
-        />
+        <h2 style={{ marginBottom: 20 }}>Start New Chat</h2>
         <button
-          onClick={() => roomId && setJoined(true)}
+          onClick={() => setJoined(true)}
           style={{
             width: '100%',
             padding: 12,
-            background: '#0066ff',
+            background: '#fff',
             border: 'none',
-            borderRadius: 8,
-            color: '#fff',
+            borderRadius: 12,
+            color: '#000',
             cursor: 'pointer',
-            fontWeight: 600
+            fontWeight: 600,
+            boxShadow: '0 4px 20px rgba(255,255,255,0.1)'
           }}
         >
-          Join Room
+          Create Room
         </button>
-        <div style={{ 
-          position: 'fixed',
-          bottom: 0,
-          left: 0,
-          right: 0,
-          padding: 16, 
-          background: '#1a1a1a', 
-          fontSize: 11, 
-          opacity: 0.8,
-          borderTop: '1px solid #333',
-          textAlign: 'center'
+        <div style={{
+          marginTop: 16,
+          fontSize: 10,
+          opacity: 0.5,
+          textAlign: 'center',
+          color: '#999',
+          lineHeight: 1.6
         }}>
-          <strong>⚠️ Use unique room names!</strong><br/>
-          If two groups use the same name (e.g., "meeting"), everyone will be connected together.<br/>
-          <span style={{ opacity: 0.6 }}>Example: "alice-bob-jan15" instead of "meeting"</span>
+          Create Room -&gt; Create Link -&gt; Share Link -&gt;<br/>
+          Friend Pastes It in Browser Address Bar -&gt; Chat!
         </div>
       </div>
     )
   }
 
-  return <ChatCore roomId={roomId} />
+  return <ChatCore invitePeerId={invitePeerId} />
+}
+
+export default function Chat() {
+  return (
+    <Suspense fallback={<div style={{ padding: 40, textAlign: 'center' }}>Loading...</div>}>
+      <ChatContent />
+    </Suspense>
+  )
 }

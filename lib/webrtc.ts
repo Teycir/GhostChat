@@ -8,6 +8,7 @@ export interface PeerConnection {
 const peers = new Map<string, SimplePeer.Instance>();
 
 export function createPeer(initiator: boolean, peerId: string, onSignal: (signal: any) => void, onData: (data: string) => void): SimplePeer.Instance {
+  console.log('[WEBRTC] Creating peer:', peerId, 'initiator:', initiator);
   const peer = new SimplePeer({
     initiator,
     trickle: false,
@@ -19,10 +20,17 @@ export function createPeer(initiator: boolean, peerId: string, onSignal: (signal
     }
   });
 
-  peer.on('signal', onSignal);
+  peer.on('signal', (signal) => {
+    console.log('[WEBRTC] Signal generated for:', peerId);
+    onSignal(signal);
+  });
   peer.on('data', (data) => onData(data.toString()));
-  peer.on('error', (err) => console.error('Peer error:', err));
-  peer.on('close', () => peers.delete(peerId));
+  peer.on('error', (err) => console.error('[WEBRTC] Peer error:', peerId, err));
+  peer.on('close', () => {
+    console.log('[WEBRTC] Peer closed:', peerId);
+    peers.delete(peerId);
+  });
+  peer.on('connect', () => console.log('[WEBRTC] Peer connected:', peerId));
 
   peers.set(peerId, peer);
   return peer;

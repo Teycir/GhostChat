@@ -2,16 +2,42 @@
 
 All notable changes to GhostChat will be documented in this file.
 
-## [Unreleased] - 2025-11-13
+## [Unreleased] - 2025-01-13
 
 ### Added
+- Invite link system replacing room names for P2P connections
+- "Create Invite Link" button with clear sharing instructions
+- Connection status indicators (Connecting/Connected/Disconnected)
+- Message queue system to buffer messages before connection
+- Disconnect detection with red "✗ Disconnected" status
+- Input field disabled until connection established
+- White button styling throughout UI
+- White message bubbles for sent messages
+- Step-by-step footer instructions on pre-join screen
+- Clipboard fallback for non-HTTPS contexts
+
+### Changed
+- Replaced Gun.js with PeerJS for simpler, more reliable P2P
+- Fixed peer ID generation to comply with PeerJS validation
+- Message input now white background when connected
+- Connection status colors: green (connected), yellow (connecting), red (disconnected)
+- Improved invite link display with instructions
+- Footer instructions split into two lines for readability
+
+### Fixed
+- First message loss issue (messages now queued until connected)
+- Invalid peer ID error (removed leading hyphens)
+- Clipboard API unavailable on non-HTTPS contexts
+- Input field accessibility when not connected
+
+### Added (Previous)
 - Initial project setup with Next.js 15
 - Basic P2P chat functionality using WebRTC
 - Gun.js signaling for peer discovery
 - Memory-only storage (RAM-only, no disk writes)
 - Ephemeral identity generation (random UUID per session)
 - Auto-blur privacy feature when tab loses focus
-- Room-based chat system
+- Invite link-based chat system (replaced room names)
 - PWA manifest and service worker
 - Landing page with ghost branding
 - Join room interface with ghost icon
