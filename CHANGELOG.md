@@ -1,5 +1,28 @@
 # Changelog
 
+## [0.3.1] - 2025-01-XX
+
+### Fixed
+- **Critical Build Issue**: Added missing @types/simple-peer dependency
+- **TypeScript Errors**: Fixed type inconsistencies in peer-simplepeer.ts
+- **Unused Dependencies**: Removed unused signaling.ts file requiring gun module
+- **E2E Tests**: Updated tests to match current UI (Create Room vs Create Invite Link)
+- **Test Format**: Converted file-transfer.test.ts to proper Vitest format with assertions
+- **Webpack Module Error**: Cleaned .next cache and reinstalled dependencies
+
+### Changed
+- Removed obsolete Settings and Diagnostics button tests from E2E suite
+- Improved test reliability and maintainability
+
+### Technical
+- Build now succeeds without errors
+- All unit tests pass with proper assertions
+- E2E tests aligned with current UI state
+- Development pipeline stabilized
+- Clean dependency installation
+
+---
+
 ## [0.4.0] - 2025-11-14
 
 ### Added

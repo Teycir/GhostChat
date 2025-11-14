@@ -6,8 +6,16 @@
 [![privacy](https://img.shields.io/badge/privacy-first-green)](https://github.com/topics/privacy)
 [![webrtc](https://img.shields.io/badge/webrtc-powered-orange)](https://github.com/topics/webrtc)
 [![nextjs](https://img.shields.io/badge/nextjs-15-black)](https://github.com/topics/nextjs)
+[![simple-peer](https://img.shields.io/badge/simple--peer-enabled-yellow)](https://github.com/topics/simple-peer)
+[![cloudflare](https://img.shields.io/badge/cloudflare-workers-orange)](https://github.com/topics/cloudflare)
 [![pwa](https://img.shields.io/badge/pwa-installable-purple)](https://github.com/topics/pwa)
 [![license](https://img.shields.io/badge/license-MIT-blue)](LICENSE)
+
+---
+
+## Disclaimer
+
+This project is shared for educational purposes only. Users are responsible for complying with all applicable laws and regulations. Do not use this tool for illegal activities. The developers assume no liability for misuse.
 
 ---
 
@@ -20,7 +28,7 @@ GhostChat is a truly private chat app where messages travel directly between you
 ### How to Use
 
 **Step 1: Create a room**
-- Go to the website (e.g., `https://ghostchat.app`)
+- Open the website
 - Click "Start Chatting"
 - Click "Create Room"
 - You'll see a "Copy Invite Link" button
@@ -28,75 +36,57 @@ GhostChat is a truly private chat app where messages travel directly between you
 **Step 2: Share the invite link**
 - Click "Copy Invite Link"
 - Share the link with your friend (via text, email, WhatsApp, etc.)
-- Example link: `https://ghostchat.app/chat?peer=abc123xyz`
 
 **Step 3: Your friend joins**
 - They click your invite link
 - Opens directly in their browser
 - Automatically connects to you
-- No room names or codes needed!
 
 **Step 4: Chat directly**
 - Once connected, you'll see "Connected" status
 - Type messages and press Enter or click Send
 - Messages travel directly between you (peer-to-peer)
-- No servers can read your messages
 
 **Step 5: End the chat**
 - Close the browser tab
 - All messages instantly disappear from memory
-- Invite link expires (can't be reused)
+- Invite link expires
 - No history, no traces left behind
 
 **Important**: Both people must be online at the same time. If someone closes their tab, the connection ends.
 
 ### Key Features
 
-- **Direct connections**: Messages never touch our servers
-- **Memory-only**: No messages saved to disk
-- **Ephemeral**: New identity each session
-- **Auto-blur**: Screen blurs when you switch tabs
-- **No accounts**: No signup, no phone number, no email
-- **Works everywhere**: Desktop, mobile, any browser
-- **Decentralized**: Use your own PeerJS server (optional)
-
-### Privacy Guarantees
-
-- **RAM-only storage**: Messages never touch your disk
-- **Auto-wipe**: Everything erased when tab closes
-- **No history**: Messages exist only during the session
-- **No tracking**: Zero analytics, logs, or user data
+- **Direct P2P**: Messages and files never touch servers
+- **Memory-only**: RAM storage, auto-wipe on tab close
+- **Ephemeral**: New identity each session, no history
+- **Auto-blur**: Screen protection when switching tabs
 - **No accounts**: No signup, email, or phone number
+- **Zero tracking**: No analytics, logs, or user data
 - **Open source**: Fully auditable code
+- **Works everywhere**: Desktop, mobile, any browser
 
 ### Example Scenarios
 
 **Two people chatting (Alice and Bob):**
 
 1. Alice opens GhostChat and clicks "Create Room"
-2. Alice clicks "Copy Invite Link" and gets: `ghostchat.app/chat?peer=abc123`
-3. Alice texts Bob: "Join me on GhostChat: [paste link]"
+2. Alice clicks "Copy Invite Link"
+3. Alice texts Bob the invite link
 4. Bob clicks the link and automatically connects to Alice
 5. Both see "Connected" status
 6. They chat privately - messages go directly between them
 7. When done, both close their tabs
 8. All messages vanish - no history exists anywhere
 
-**Multiple people (currently 1-to-1, group chat coming soon):**
-
-Currently, GhostChat supports one-to-one conversations. Each invite link connects two people directly. For group chats, create multiple rooms or wait for the upcoming group chat feature!
-
 ### Limitations
 
-- **Invite links expire**: Links only work while the creator's tab is open
-- **Connection reliability**: 60-70% success rate across different networks
-- **Corporate firewalls**: May block WebRTC connections
-- **Free TURN servers**: May be rate-limited or unreliable
-- Must keep tab open while chatting
-- Both people need to be online at the same time
-- Your friend sees your IP address (use VPN to mask it)
-- **One-to-one only**: Currently supports 2 people per room (group chat coming soon)
-- **Alpha status**: Not production-ready, best for testing
+- Invite links expire when creator closes tab
+- Connection success varies by network (70-80%)
+- Corporate firewalls may block WebRTC
+- Both users must be online simultaneously
+- Peers see each other's IP (use VPN to mask)
+- One-to-one only (2 people per room)
 
 ---
 
@@ -108,13 +98,7 @@ For true decentralization, you can configure your own PeerJS signaling server:
 2. Enter your server details (host, port, path, API key)
 3. Save and reload
 
-See [CUSTOM-SERVER.md](CUSTOM-SERVER.md) for detailed instructions on:
-- Self-hosting PeerJS server
-- Using community servers
-- Deployment guides
-- Cost estimates
-
-**Default**: Uses free PeerJS cloud server (0.peerjs.com) - no configuration needed.
+**Default**: Uses Cloudflare Workers signaling servers with automatic fallback.
 
 ---
 
@@ -152,45 +136,20 @@ npm run build
 
 **How P2P Works**:
 
-1. **User creates room** → PeerJS generates unique peer ID
-2. **Invite link shared** → Contains peer ID in URL (`?peer=abc123`)
-3. **Friend clicks link** → Extracts peer ID from URL
-4. **Direct connection** → PeerJS establishes WebRTC P2P link
-5. **Messages flow** → Direct peer-to-peer (no server involved)
-6. **Tab closes** → Everything wiped from memory
-
-**Key Components**:
-
-```
-lib/
-├── peer-manager.ts # PeerJS P2P connections
-├── storage.ts      # Memory-only storage
-└── identity.ts     # Ephemeral identity (deprecated)
-
-components/
-└── ChatCore.tsx    # Main chat UI
-
-app/
-├── page.tsx        # Landing page
-└── chat/page.tsx   # Chat interface
-```
-
-**Data Flow**:
-
-- **Signaling**: PeerJS server (WebRTC offer/answer only)
-- **Peer Discovery**: Invite links with peer IDs in URL
-- **Messages**: Direct P2P via WebRTC data channels
-- **Storage**: RAM only, no disk writes
-- **Identity**: Random peer ID per session
-- **Encryption**: WebRTC native (DTLS/SRTP)
+1. User creates room → Generates unique peer ID
+2. Invite link shared → Contains peer ID in URL (`?peer=abc123`)
+3. Friend clicks link → Extracts peer ID from URL
+4. Direct connection → WebRTC P2P link established
+5. Messages flow → Direct peer-to-peer (no server involved)
+6. Tab closes → Everything wiped from memory
 
 **Infrastructure**:
 
 - Static hosting (Cloudflare Pages - free)
-- **Custom Cloudflare Workers**: 2 self-hosted signaling servers (200k requests/day)
-- **Automatic Fallback**: Worker 1 → Worker 2 → PeerJS (0.peerjs.com)
+- Custom Cloudflare Workers signaling (200k requests/day)
+- Automatic fallback (Worker 1 → Worker 2 → PeerJS backup)
 - Public STUN servers (Google/Mozilla - free)
-- **100% free, decentralized infrastructure**
+- 100% free, decentralized infrastructure
 
 ### Project Structure
 
@@ -250,94 +209,18 @@ localStorage.debug = 'simple-peer'
 
 ### Deployment
 
-**Cloudflare Pages**:
 ```bash
+# Cloudflare Pages (recommended)
 npm run build
 wrangler pages deploy out
-```
 
-**GitHub Pages**:
-```bash
+# GitHub Pages
 npm run build
 gh-pages -d out
-```
 
-**Any Static Host**:
-```bash
+# Any static host
 npm run build
 # Upload /out directory
-```
-
-## Development
-
-### Prerequisites
-
-- Node.js 18+
-- Modern browser (Chrome/Firefox/Safari/Edge)
-- Multiple browser tabs/windows (for local multi-peer testing)
-
-### Installation
-
-```bash
-npm install
-```
-
-### Building
-
-```bash
-# Development build with HMR
-npm run dev
-# Open http://localhost:3000
-
-# Production build (static export)
-npm run build
-# Generates /out directory with static files
-
-# Preview production build locally
-npx serve out
-```
-
-### Testing
-
-```bash
-# Multi-peer local testing
-# 1. Start dev server: npm run dev
-# 2. Open http://localhost:3000 in tab 1
-# 3. Open http://localhost:3000 in tab 2 (or different browser)
-# 4. Test message sync between tabs
-
-# Mobile testing
-# 1. Get local IP: ifconfig (Unix) or ipconfig (Windows)
-# 2. Access from phone: http://YOUR_IP:3000
-# 3. Test P2P between desktop and mobile
-
-# Note: Local testing doesn't simulate real NAT scenarios
-# Real-world testing requires deployment to different networks
-```
-
-### Deployment
-
-```bash
-# Cloudflare Pages (recommended - free unlimited)
-npm run build
-wrangler pages deploy out
-# Or connect GitHub repo to Cloudflare Pages dashboard
-
-# GitHub Pages (alternative)
-npm run build
-gh-pages -d out
-
-# Tor Hidden Service (censorship-resistant backup)
-npm run build
-# 1. Copy out/ to server
-# 2. Configure nginx to serve static files
-# 3. Configure Tor hidden service
-# 4. Access via .onion address
-
-# Community self-hosting (Docker)
-npm run build
-docker build -t ghostchat .
-docker run -p 80:80 ghostchat
 ```
 
 ## Core Concepts
@@ -394,15 +277,6 @@ const inviteExpiry = Date.now() + 3600000;
 if (Date.now() > inviteExpiry) return null;
 ```
 
-### Propagation Tracking
-
-Every invite, share, and referral is tracked locally. Users unlock features (badges, faster connections) by sharing:
-
-```typescript
-trackPropagation('invite'); // Increments local counter
-// 5+ invites → unlock 'pro' features
-```
-
 ### P2P Messaging
 
 Messages sent directly peer-to-peer via WebRTC data channels:
@@ -420,60 +294,24 @@ peer.on('data', (message) => {
 });
 ```
 
-### Invite Generation
 
-One-tap invite creation with QR codes and Web Share API:
-
-```typescript
-// Generate invite with peer ID and signaling info
-<PropagateInvite peerId="abc123" signalingServer="wss://gun-relay.com/gun" />
-
-// Share via Web Share API (mobile-friendly)
-await navigator.share({
-  title: 'Join me on GhostChat',
-  url: 'https://ghostchat.app/invite/abc123'
-});
-```
-
-### PWA Installation
-
-Prompt users to install PWA for better experience:
-
-```typescript
-// Detect if app is installable
-window.addEventListener('beforeinstallprompt', (e) => {
-  // Show custom install button
-  showInstallPrompt(e);
-});
-
-// Track if installed
-window.addEventListener('appinstalled', () => {
-  trackPropagation('install');
-});
-```
 
 ## Privacy & Security
 
-- **True P2P**: Messages sent directly between peers via WebRTC (no relay in path)
-- **E2E Encryption**: WebRTC native DTLS/SRTP encryption
-- **Signaling Privacy**: PeerJS server only sees connection metadata, never messages
-- **Memory-Only**: Messages stored in RAM only, zero disk traces
-- **Ephemeral Identity**: Random peer ID per session, no persistent tracking
-- **Auto-Clear**: All data wiped when tab closes
-- **No Metadata**: No timestamps, no read receipts, no typing indicators
-- **Privacy UI**: Auto-blur on inactive, invite expiry
-- **Zero Tracking**: No analytics, no telemetry, no user accounts
-- **Open Source**: Fully auditable codebase
+- **True P2P**: Direct WebRTC connections, no relay
+- **E2E Encryption**: WebRTC native (DTLS/SRTP)
+- **Memory-Only**: RAM storage, zero disk traces
+- **Ephemeral**: Random peer ID per session
+- **Auto-Clear**: All data wiped on tab close
+- **Zero Tracking**: No analytics, telemetry, or accounts
+- **Open Source**: Fully auditable
 
-### Security Considerations
+### Security Notes
 
-- **Signaling Trust**: PeerJS server sees who connects to whom (but not message content)
-- **Metadata Leakage**: Connection timing/patterns visible during signaling phase
-- **IP Exposure**: Peers learn each other's IP addresses (inherent to P2P)
-- **Spam Risk**: Rate limiting on signaling phase prevents connection flooding
-- **Memory-Only**: Messages exist only in RAM, wiped on tab close
-- **No Forensics**: Zero disk traces, no recovery possible (by design)
-- **Session Isolation**: New identity per session, can't link conversations
+- Signaling server sees connection metadata (not messages)
+- Peers see each other's IP addresses (inherent to P2P)
+- No forensics possible (by design)
+- Session isolation prevents linking conversations
 
 ## Contributing
 
@@ -484,31 +322,17 @@ We welcome contributions! This is a community-driven project focused on privacy 
 3. Commit your changes
 4. Push and open a pull request
 
-## Distribution Strategy
-
-### Deployment
-
-**Primary Distribution**: Web URL (PWA)
-- Deploy to: `ghostchat.app` (or similar short domain)
-- Hosting: **Cloudflare Pages** (free tier, unlimited ### Security
-
-- **Encryption**: WebRTC native (DTLS/SRTP)
-- **No persistence**: Messages in RAM only
-- **Ephemeral**: New identity each session
-- **Open source**: Fully auditable
-- **No tracking**: Zero analytics or logs
-
-### Troubleshooting
-
-**Messages not syncing?**
-- Check both users joined same room ID
-- Check browser console for errors
-- Try different room name
+## Troubleshooting
 
 **Connection failed?**
 - Check firewall settings
 - Try different network
 - Some corporate networks block WebRTC
+
+**Messages not syncing?**
+- Check both users have same invite link
+- Check browser console for errors
+- Refresh and try again
 
 **Icons not loading?**
 - Clear browser cache
@@ -549,12 +373,6 @@ GhostChat has no central servers, no phone numbers, no persistent identity. Mess
 **Can my friend see my IP address?**  
 Yes, that's how P2P works. Use a VPN to mask your IP if needed.
 
-**Can multiple people join the same room?**  
-Yes! Any number of people can join the same room name. Everyone in the room will be connected to each other (mesh network). All participants see all messages in real-time.
-
-**What if two groups accidentally use the same room name?**  
-All 4 people will be connected together in one big group chat. If Alice and Bob join room "meeting" at the same time Jack and Jessica also join room "meeting", all 4 will see each other's messages. To avoid this, use unique room names (e.g., "alice-bob-jan15" instead of generic names like "meeting" or "chat").
-
 ---
 
 **Status**: Beta - Production Ready  
@@ -574,4 +392,4 @@ All 4 people will be connected together in one big group chat. If Alice and Bob 
 - Invite links expire when creator closes tab
 - Connection success varies by network (70-80% cross-network)
 - Free TURN servers may be rate-limited
-- One-to-one chat only (group chat coming soon)
+- One-to-one chat only

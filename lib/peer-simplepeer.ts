@@ -8,7 +8,7 @@ let peer: SimplePeer.Instance | null = null;
 let remotePeerId: string | null = null;
 let storedOnMessage: ((peerId: string, data: string) => void) | null = null;
 let storedOnConnect: (() => void) | null = null;
-let storedOnDisconnect: (() => void) | null = null;
+let storedOnDisconnect: (() => void) | undefined = undefined;
 
 async function tryConnectWorker(
   workerUrl: string,
@@ -168,5 +168,5 @@ export function destroySimplePeer() {
   remotePeerId = null;
   storedOnMessage = null;
   storedOnConnect = null;
-  storedOnDisconnect = null;
+  storedOnDisconnect = undefined;
 }
