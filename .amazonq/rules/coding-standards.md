@@ -38,6 +38,26 @@ Allowed (markdown files only):
 - Do not just suggest commands - run them using executeBash tool
 - Verify command results before proceeding to next steps
 
+## Development Workflow
+
+### Test-Driven Development (TDD)
+- **NEVER** add features directly to existing components
+- **ALWAYS** create new features in isolated files first
+- Write tests for the isolated module before integration
+- Only integrate after tests pass successfully
+
+**Process:**
+1. Create new feature in dedicated file (e.g., `lib/file-sharing.ts`)
+2. Write unit tests in `tests/` directory
+3. Run tests and verify they pass
+4. Only then integrate into existing components
+
+**Example:**
+```typescript
+// Bad: Adding file sharing directly to ChatCore.tsx
+// Good: Create lib/file-sharing.ts -> test it -> integrate
+```
+
 ## Code Style
 
 ### Minimal Implementation

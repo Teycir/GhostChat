@@ -2,6 +2,12 @@ export interface Message {
   text: string;
   peerId: string;
   isSelf: boolean;
+  file?: {
+    name: string;
+    size: number;
+    type: string;
+    data: string;
+  };
 }
 
 let messages: Message[] = [];

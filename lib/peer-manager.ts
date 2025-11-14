@@ -1,4 +1,3 @@
-import { compressAsync, decompressAsync } from './compression';
 import { trackSent, trackReceived } from './bandwidth-monitor';
 import * as ProtocolManager from './peer-protocol-manager';
 
@@ -16,10 +15,9 @@ export async function initPeer(
     return { id: peerId };
   }
 
-  const wrappedOnMessage = async (fromPeerId: string, data: string) => {
+  const wrappedOnMessage = (fromPeerId: string, data: string) => {
     trackReceived(data.length);
-    const text = await decompressAsync(data);
-    onMessage(fromPeerId, text);
+    onMessage(fromPeerId, data);
   };
 
   try {
@@ -49,19 +47,17 @@ export function connectToPeer(
   onConnect: () => void,
   onDisconnect?: () => void
 ) {
-  const wrappedOnMessage = async (fromPeerId: string, data: string) => {
+  const wrappedOnMessage = (fromPeerId: string, data: string) => {
     trackReceived(data.length);
-    const text = await decompressAsync(data);
-    onMessage(fromPeerId, text);
+    onMessage(fromPeerId, data);
   };
 
   ProtocolManager.connectToPeer(remotePeerId, wrappedOnMessage, onConnect, onDisconnect);
 }
 
-export async function sendToAll(data: string) {
-  const compressed = await compressAsync(data);
-  trackSent(compressed.length);
-  ProtocolManager.sendToAll(compressed);
+export function sendToAll(data: string) {
+  trackSent(data.length);
+  ProtocolManager.sendToAll(data);
 }
 
 export function getPeerId() {

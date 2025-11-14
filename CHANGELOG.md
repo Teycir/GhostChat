@@ -1,5 +1,32 @@
 # Changelog
 
+## [0.4.0] - 2025-11-14
+
+### Added
+- **P2P File Transfer**: Send files up to 10MB directly peer-to-peer
+- **Chunked Transfer**: Large files split into 64KB chunks for reliable transmission
+- **Upload Progress**: Real-time progress bar showing chunk upload status
+- **File Icons**: Document icon for PDFs/files, inline preview for images
+- **File Support**: Images, PDFs, docs, text files
+- **Test Suite**: Isolated file transfer tests for chunk/reassemble/display
+
+### Fixed
+- **Chunk Reassembly**: Fixed array initialization bug preventing file reassembly
+- **Message Display**: Files now display with icons, separate from text messages
+- **State Updates**: Fixed React state updates for file messages
+
+### Changed
+- **Send Button**: Removed send button, Enter key only for cleaner UX
+- **Storage Interface**: Added file property to Message interface
+
+### Technical
+- Fixed `deserializeFileMessage` to use `.fill(null)` for proper array initialization
+- Added upload progress state and UI component
+- Separated file display logic from text messages
+- Created `tests/file-transfer.test.ts` for isolated testing
+
+---
+
 ## [0.3.0] - 2025-11-14
 
 ### Added

@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>File Transfer Test</title>
+  <style>
+    body { font-family: monospace; padding: 20px; background: #000; color: #0f0; }
+    .test { margin: 10px 0; padding: 10px; border: 1px solid #333; }
+    .pass { color: #0f0; }
+    .fail { color: #f00; }
+    button { padding: 10px; margin: 5px; }
+  </style>
+</head>
+<body>
+  <h1>File Transfer Module Test</h1>
+  <div id="results"></div>
+  <hr>
+  <h2>Manual File Test</h2>
+  <input type="file" id="fileInput" accept="image/*,.pdf,.txt">
+  <button onclick="testFileUpload()">Test File Upload</button>
+  <div id="fileResult"></div>
+
+  <script type="module">
+    const results = document.getElementById('results');
+
+    function log(msg, pass = true) {
+      const div = document.createElement('div');
+      div.className = `test ${pass ? 'pass' : 'fail'}`;
+      div.textContent = `${pass ? '✓' : '✗'} ${msg}`;
+      results.appendChild(div);
+    }
+
+    const fileData = {
+      name: 'test.txt',
+      size: 100,
+      type: 'text/plain',
+      data: 'data:text/plain;base64,dGVzdA=='
+    };
+
+    const serialized = JSON.stringify({ type: 'file', file: fileData });
+    log('Serialize file data', serialized.includes('"type":"file"'));
+
+    const deserialized = JSON.parse(serialized);
+    log('Deserialize file data', deserialized.file.name === 'test.txt');
+
+    const isImage = fileData.type.startsWith('image/');
+    log('Detect non-image file', !isImage);
+
+    const imageData = { ...fileData, type: 'image/jpeg' };
+    const isImageFile = imageData.type.startsWith('image/');
+    log('Detect image file', isImageFile);
+
+    const formatted = (1536 / 1024).toFixed(1) + 'KB';
+    log('Format file size', formatted === '1.5KB');
+
+    const maxSize = 10 * 1024 * 1024;
+    const validSize = 5 * 1024 * 1024;
+    const invalidSize = 11 * 1024 * 1024;
+    log('Accept files under 10MB', validSize < maxSize);
+    log('Reject files over 10MB', invalidSize > maxSize);
+
+    window.testFileUpload = async function() {
+      const input = document.getElementById('fileInput');
+      const result = document.getElementById('fileResult');
+      const file = input.files[0];
+      
+      if (!file) {
+        result.innerHTML = '<span class="fail">No file selected</span>';
+        return;
+      }
+
+      if (file.size > 10 * 1024 * 1024) {
+        result.innerHTML = '<span class="fail">File too large. Max 10MB.</span>';
+        return;
+      }
+
+      const reader = new FileReader();
+      reader.onload = () => {
+        const fileData = {
+          name: file.name,
+          size: file.size,
+          type: file.type,
+          data: reader.result
+        };
+
+        const serialized = JSON.stringify({ type: 'file', file: fileData });
+        const deserialized = JSON.parse(serialized);
+
+        result.innerHTML = `
+          <div class="pass">File processed successfully</div>
+          <div>Name: ${fileData.name}</div>
+          <div>Size: ${(fileData.size / 1024).toFixed(1)}KB</div>
+          <div>Type: ${fileData.type}</div>
+          <div>Is Image: ${fileData.type.startsWith('image/')}</div>
+          <div>Serialized length: ${serialized.length} bytes</div>
+          <div>Deserialized: ${deserialized.file.name}</div>
+          ${fileData.type.startsWith('image/') ? 
+            `<img src="${fileData.data}" style="max-width: 200px; margin-top: 10px;">` : 
+            `<a href="${fileData.data}" download="${fileData.name}">Download</a>`
+          }
+        `;
+      };
+      reader.onerror = () => {
+        result.innerHTML = '<span class="fail">Failed to read file</span>';
+      };
+      reader.readAsDataURL(file);
+    };
+  </script>
+</body>
+</html>

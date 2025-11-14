@@ -6,6 +6,9 @@ let ws: WebSocket | null = null;
 let myId: string | null = null;
 let peer: SimplePeer.Instance | null = null;
 let remotePeerId: string | null = null;
+let storedOnMessage: ((peerId: string, data: string) => void) | null = null;
+let storedOnConnect: (() => void) | null = null;
+let storedOnDisconnect: (() => void) | null = null;
 
 async function tryConnectWorker(
   workerUrl: string,
@@ -13,6 +16,10 @@ async function tryConnectWorker(
   onConnect: () => void,
   onDisconnect?: () => void
 ): Promise<string | null> {
+  storedOnMessage = onMessage;
+  storedOnConnect = onConnect;
+  storedOnDisconnect = onDisconnect;
+  
   return new Promise((resolve, reject) => {
     myId = Math.random().toString(36).substr(2, 9);
     
@@ -41,7 +48,7 @@ async function tryConnectWorker(
             config: { iceServers: getTURNServers() }
           });
           
-          setupPeer(peer, onMessage, onConnect, onDisconnect, msg.src);
+          setupPeer(peer, storedOnMessage!, storedOnConnect!, storedOnDisconnect, msg.src);
         }
         
         peer.signal(msg.signal);
@@ -55,7 +62,7 @@ async function tryConnectWorker(
     
     ws.onclose = () => {
       console.log('[SIMPLEPEER] WebSocket closed');
-      if (onDisconnect) onDisconnect();
+      if (storedOnDisconnect) storedOnDisconnect();
     };
     
     setTimeout(() => reject(new Error('Worker timeout')), 5000);
@@ -159,4 +166,7 @@ export function destroySimplePeer() {
   ws = null;
   myId = null;
   remotePeerId = null;
+  storedOnMessage = null;
+  storedOnConnect = null;
+  storedOnDisconnect = null;
 }
