@@ -17,42 +17,58 @@ function ChatContent() {
 
   if (!joined) {
     return (
-      <div style={{ maxWidth: 400, margin: '100px auto', padding: 40, textAlign: 'center' }}>
-        <img 
-          src="/assets/ghostNobg.png" 
-          alt="Ghost" 
-          width={80} 
-          height={80} 
-          style={{ margin: '0 auto 20px', display: 'block' }}
+      <div style={{
+        minHeight: '100vh',
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'center',
+        padding: 20,
+        background: '#000',
+        color: '#fff'
+      }}>
+        <img
+          src="/assets/ghostNobg.png"
+          alt="Ghost"
+          width={180}
+          height={180}
+          style={{ marginBottom: 30, opacity: 0.9 }}
         />
-        <h2 style={{ marginBottom: 20 }}>Start New Chat</h2>
+        <h1 style={{
+          fontSize: 64,
+          marginBottom: 16,
+          fontWeight: 700,
+          letterSpacing: -1
+        }}>
+          GhostChat
+        </h1>
+        <p style={{
+          fontSize: 22,
+          marginBottom: 50,
+          opacity: 0.7,
+          maxWidth: 500,
+          textAlign: 'center',
+          lineHeight: 1.5
+        }}>
+          Your messages vanish like ghosts. <br />
+          Direct P2P chat with zero traces.
+        </p>
         <button
           onClick={() => setJoined(true)}
           style={{
-            width: '100%',
-            padding: 12,
+            padding: '18px 48px',
             background: '#fff',
+            color: '#000',
             border: 'none',
             borderRadius: 12,
-            color: '#000',
-            cursor: 'pointer',
             fontWeight: 600,
+            fontSize: 18,
+            cursor: 'pointer',
             boxShadow: '0 4px 20px rgba(255,255,255,0.1)'
           }}
         >
-          Create Room
+          Start Chatting
         </button>
-        <div style={{
-          marginTop: 16,
-          fontSize: 10,
-          opacity: 0.5,
-          textAlign: 'center',
-          color: '#999',
-          lineHeight: 1.6
-        }}>
-          Create Room -&gt; Create Link -&gt; Share Link -&gt;<br/>
-          Friend Pastes It in Browser Address Bar -&gt; Chat!
-        </div>
       </div>
     )
   }

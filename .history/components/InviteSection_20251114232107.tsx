@@ -9,11 +9,7 @@ interface InviteSectionProps {
   connected: boolean;
 }
 
-export default function InviteSection({
-  peerId,
-  inviteLink,
-  connected,
-}: InviteSectionProps) {
+export default function InviteSection({ peerId, inviteLink, connected }: InviteSectionProps) {
   const [linkCreated, setLinkCreated] = useState(false);
   const [copied, setCopied] = useState(false);
   const [showQR, setShowQR] = useState(false);
@@ -75,7 +71,7 @@ export default function InviteSection({
                       setCopied(true);
                       setTimeout(() => setCopied(false), 2000);
                     } catch (err) {
-                      console.error("Clipboard failed:", err);
+                      console.error('Clipboard failed:', err);
                     }
                   }}
                   style={{
@@ -144,8 +140,7 @@ export default function InviteSection({
             </>
           )}
           <div style={{ opacity: 0.6, fontSize: 10 }}>
-            Your peer must paste it in their browser or scan QR code to start a
-            chat
+            Your peer must paste it in their browser or scan the code to start a chat
           </div>
           <div
             style={{
