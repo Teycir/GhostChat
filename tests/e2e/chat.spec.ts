@@ -13,32 +13,24 @@ test.describe('GhostChat E2E', () => {
     await page.click('text=Start Chatting')
     
     await expect(page).toHaveURL('/chat')
-    await expect(page.locator('h2')).toContainText('Join a Room')
   })
 
-  test('should show room name input', async ({ page }) => {
+  test('should show create invite button', async ({ page }) => {
     await page.goto('/chat')
     
-    const input = page.locator('input[placeholder*="unique room name"]')
-    await expect(input).toBeVisible()
-    
-    const button = page.locator('button:has-text("Join Room")')
-    await expect(button).toBeVisible()
+    await expect(page.locator('text=Create Invite Link')).toBeVisible({ timeout: 5000 })
   })
 
-  test('should show warning about unique room names', async ({ page }) => {
+  test('should show connection status', async ({ page }) => {
     await page.goto('/chat')
     
-    await expect(page.locator('text=Use unique room names')).toBeVisible()
-    await expect(page.locator('text=alice-bob-jan15')).toBeVisible()
+    await expect(page.locator('text=Disconnected')).toBeVisible()
   })
 
-  test('should join room with valid name', async ({ page }) => {
+  test('should show settings and diagnostics buttons', async ({ page }) => {
     await page.goto('/chat')
     
-    await page.fill('input[placeholder*="unique room name"]', 'test-room-123')
-    await page.click('button:has-text("Join Room")')
-    
-    await expect(page.locator('text=Room: test-room-123')).toBeVisible()
+    await expect(page.locator('button:has-text("Settings")')).toBeVisible()
+    await expect(page.locator('button:has-text("Diagnostics")')).toBeVisible()
   })
 })
