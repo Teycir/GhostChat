@@ -64,6 +64,7 @@ export default function ChatCore({ invitePeerId }: ChatCoreProps) {
   const initialized = React.useRef(false);
   const startTime = React.useRef(Date.now());
   const typingTimeout = React.useRef<NodeJS.Timeout | null>(null);
+  const connectionTimeout = React.useRef<NodeJS.Timeout | null>(null);
 
   useEffect(() => {
     const uptimeInterval = setInterval(() => {
@@ -108,6 +109,10 @@ export default function ChatCore({ invitePeerId }: ChatCoreProps) {
       const handleConnect = () => {
         setConnected(true);
         setConnecting(false);
+        if (connectionTimeout.current) {
+          clearTimeout(connectionTimeout.current);
+          connectionTimeout.current = null;
+        }
         setMessageQueue((prev) => {
           prev.forEach((msg) => sendToAll(msg));
           return [];
@@ -153,7 +158,7 @@ export default function ChatCore({ invitePeerId }: ChatCoreProps) {
             handleDisconnect,
           );
           
-          setTimeout(() => {
+          connectionTimeout.current = setTimeout(() => {
             if (!connected) {
               setConnecting(false);
               setError(getConnectionErrorMessage({ type: "peer-unavailable" }));
