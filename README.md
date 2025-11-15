@@ -344,6 +344,22 @@ MITM Attack:
 - npm or yarn
 - Modern browser with WebRTC support
 
+### Browser Compatibility
+
+**Supported Browsers:**
+- Chrome/Chromium (recommended)
+- Firefox
+- Edge
+- Safari
+- Brave (with shields down for this site)
+
+**Not Compatible:**
+- LibreWolf - WebRTC is disabled by default for privacy
+- Tor Browser - WebRTC is blocked for anonymity
+- Browsers with strict WebRTC blocking
+
+**Note:** Privacy-focused browsers often disable WebRTC to prevent IP leaks. To use GhostChat with these browsers, you must enable WebRTC in settings (not recommended as it defeats their privacy purpose). Use mainstream browsers with a VPN instead
+
 ### Setup
 
 ```bash
