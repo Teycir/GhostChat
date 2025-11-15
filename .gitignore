@@ -6,3 +6,6 @@ out
 .trunkradata/
 .wrangler/
 .history
+.env
+.env.local
+.env*.local

@@ -7,6 +7,7 @@
     "build": "next build",
     "start": "next start",
     "export": "next export",
+    "deploy": "./deploy.sh",
     "test": "vitest",
     "test:ui": "vitest --ui",
     "test:e2e": "playwright test",

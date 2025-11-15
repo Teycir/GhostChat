@@ -495,7 +495,7 @@ export default function ChatCore({ invitePeerId }: ChatCoreProps) {
 
       <div style={{ flex: 1, overflow: "auto", padding: 16 }}>
         {messages.length > 0 && (
-          <div style={{ marginBottom: 12, position: "sticky", top: 0, background: "#000", paddingBottom: 8, zIndex: 10 }}>
+          <div style={{ marginBottom: 12, position: "sticky", top: 0, paddingBottom: 8, zIndex: 10 }}>
             <input
               type="text"
               value={searchQuery}
@@ -503,12 +503,12 @@ export default function ChatCore({ invitePeerId }: ChatCoreProps) {
               placeholder="Search messages..."
               style={{
                 width: "100%",
-                padding: "6px 12px",
-                background: "#111",
+                padding: 8,
+                background: "#1a1a1a",
                 border: "1px solid #333",
                 borderRadius: 6,
                 color: "#fff",
-                fontSize: 11,
+                fontSize: 10,
                 outline: "none",
               }}
             />
