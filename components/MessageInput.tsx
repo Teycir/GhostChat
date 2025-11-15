@@ -135,7 +135,7 @@ export default function MessageInput({
           }
         }}
         placeholder={
-          connected ? "Type a message..." : "Waiting for connection..."
+          connected ? "Type a message and hit enter..." : "Waiting for connection..."
         }
         disabled={!connected}
         style={{
