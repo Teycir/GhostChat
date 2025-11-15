@@ -9,10 +9,12 @@ No servers storing or reading your conversations. Everything exists only in memo
 
 [![MIT License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 [![Next.js](https://img.shields.io/badge/Next.js-15-black)](https://nextjs.org)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5-blue)](https://www.typescriptlang.org)
 [![WebRTC](https://img.shields.io/badge/WebRTC-P2P-orange)](https://webrtc.org)
-[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](CONTRIBUTING.md)
+[![simple-peer](https://img.shields.io/badge/simple--peer-9-green)](https://github.com/feross/simple-peer)
+[![Cloudflare](https://img.shields.io/badge/Cloudflare-Workers-orange)](https://workers.cloudflare.com)
 
-[Live Demo](https://ghost-chat.pages.dev) • [Documentation](#documentation) • [Contributing](CONTRIBUTING.md) • [Changelog](CHANGELOG.md)
+[Live Demo](https://ghost-chat.pages.dev) • [Contributing](CONTRIBUTING.md) • [Changelog](CHANGELOG.md)
 
 </div>
 
@@ -370,15 +372,15 @@ MITM Attack:
 
 ## 📊 Comparison
 
-| Feature              | GhostChat | Signal      | WhatsApp    | Telegram    |
-| -------------------- | --------- | ----------- | ----------- | ----------- |
-| **True P2P**         | ✅ Yes    | ❌ No       | ❌ No       | ❌ No       |
-| **Server storage**   | ❌ None   | ✅ Metadata | ✅ Metadata | ✅ Messages |
-| **Requires account** | ❌ No     | ✅ Phone    | ✅ Phone    | ✅ Phone    |
-| **Message history**  | ❌ None   | ✅ Yes      | ✅ Yes      | ✅ Yes      |
-| **Self-destruct**    | ✅ Yes    | ✅ Yes      | ❌ No       | ✅ Yes      |
-| **Open source**      | ✅ Yes    | ✅ Yes      | ❌ No       | ❌ Partial  |
-| **Cost**             | 💰 Free   | 💰 Free     | 💰 Free     | 💰 Free     |
+| Feature                      | GhostChat | Signal      | WhatsApp    | Telegram    |
+| ---------------------------- | --------- | ----------- | ----------- | ----------- |
+| **True P2P**                 | ✅ Yes    | ❌ No       | ❌ No       | ❌ No       |
+| **No server storage**        | ✅ Yes    | ❌ Metadata | ❌ Metadata | ❌ Messages |
+| **Does not require account** | ✅ Yes    | ❌ Phone    | ❌ Phone    | ❌ Phone    |
+| **Logs messages**            | ❌ No     | ✅ Yes      | ✅ Yes      | ✅ Yes      |
+| **Self-destruct**            | ✅ Yes    | ✅ Yes      | ❌ No       | ✅ Yes      |
+| **Open source**              | ✅ Yes    | ✅ Yes      | ❌ No       | ❌ Partial  |
+| **Cost**                     | 💰 Free   | 💰 Free     | 💰 Free     | 💰 Free     |
 
 ---
 
