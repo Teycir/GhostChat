@@ -12,6 +12,8 @@ interface MessageInputProps {
   onTyping: () => void;
 }
 
+const QUICK_EMOJIS = ["👍", "❤️", "😂", "😮", "🔥", "😢", "🙏", "👏", "🎉", "😍", "😎", "🤔", "😱", "💯", "✨"];
+
 export default function MessageInput({
   input,
   setInput,
@@ -100,6 +102,23 @@ export default function MessageInput({
         }}
         maxLength={maxChars}
       />
+      {QUICK_EMOJIS.map((emoji) => (
+        <button
+          key={emoji}
+          onClick={() => setInput(input + emoji)}
+          disabled={!connected}
+          style={{
+            padding: "6px 8px",
+            background: connected ? "#333" : "#222",
+            border: "none",
+            borderRadius: 6,
+            cursor: connected ? "pointer" : "not-allowed",
+            fontSize: 14,
+          }}
+        >
+          {emoji}
+        </button>
+      ))}
       </div>
     </div>
   );
