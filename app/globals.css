@@ -283,17 +283,29 @@ button:active {
   font-size: clamp(16px, 3vw, 18px);
   font-weight: 700;
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: all 0.3s ease;
   animation: pulseBtn 2s ease-in-out infinite;
 }
 
 .start-btn:hover {
   filter: brightness(1.2);
   box-shadow: 0 8px 20px rgba(255, 221, 0, 0.3);
+  transform: translateY(-2px);
 }
 
 .start-btn:active {
   filter: brightness(0.9);
+  transform: translateY(0);
+}
+
+.how-to-btn {
+  animation: none;
+}
+
+.how-to-btn:hover {
+  filter: brightness(1.15);
+  box-shadow: 0 6px 16px rgba(255, 221, 0, 0.2);
+  transform: translateY(-2px);
 }
 
 select {

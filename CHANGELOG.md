@@ -1,5 +1,32 @@
 # Changelog
 
+## [0.9.1] - 2025-01-15
+
+### Added
+- **How to Use Button**: GitHub link button on landing page with GitHub icon
+- **CONTRIBUTING.md**: Complete contribution guidelines for the project
+- **Automated Deployment**: GitHub Actions workflow for Cloudflare Pages
+- **Deploy Script**: npm run deploy command for one-click deployment
+
+### Changed
+- **Landing Page**: Removed duplicate "Start Chatting" screen from /chat route
+- **Search Input UI**: Updated to match invite link textbox styling (#1a1a1a background)
+- **Search Background**: Removed black overlay to show shader background
+- **Button Layout**: How to Use button positioned below Start Chatting
+- **Button Animations**: Subtle hover effect for How to Use (no pulse animation)
+
+### Fixed
+- **TypeScript Build Error**: Fixed onDisconnect callback signature in peer-peerjs.ts
+- **Deployment Flow**: Direct chat interface on /chat without intermediate screen
+
+### Technical
+- Added .env.local for Cloudflare credentials (gitignored)
+- Created deploy.sh script with environment variable loading
+- Updated .gitignore to exclude .env files
+- Fixed peer-peerjs.ts type definitions for optional reason parameter
+
+---
+
 ## [0.9.0] - 2025-01-18
 
 ### Added
