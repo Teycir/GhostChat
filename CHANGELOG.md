@@ -1,5 +1,32 @@
 # Changelog
 
+## [0.8.0] - 2025-01-18
+
+### Added
+- **Landing Page**: New landing page with floating ghost animation
+- **UI Animations**: Subtle CSS animations for professional touch
+  - Floating ghost emoji (3s loop)
+  - Button hover effects (lift + brightness)
+  - Emoji bounce animation on hover
+  - PANIC icon pulse animation
+  - Vanishing text effect (24s fade out)
+- **Automatic Fake Traffic**: Stealthy background noise packets (3-5s intervals)
+- **Screen Blur on Idle**: Auto-blur after 30 seconds of inactivity
+- **Ephemeral Invite Links**: 24-hour expiry with IndexedDB storage
+
+### Changed
+- **Copied Button**: Now uses same yellow (#fd0) as CLEAR ALL button with black text
+- **PANIC Button**: Changed text from "PANIC" to "CLEAR ALL"
+- **Button Styling**: All buttons have smooth hover/active transitions (0.2s)
+
+### Technical
+- Added CSS keyframe animations: float, pulse, bounce, vanishOnce
+- Added idle blur timeout with 30s delay
+- Implemented automatic fake traffic on connection
+- Enhanced button interactions with transform and filter effects
+
+---
+
 ## [0.7.0] - 2025-01-18
 
 ### Changed

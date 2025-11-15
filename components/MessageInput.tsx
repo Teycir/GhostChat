@@ -150,6 +150,7 @@ export default function MessageInput({
           key={emoji}
           onClick={() => setInput(input + emoji)}
           disabled={!connected}
+          className="emoji-btn"
           style={{
             padding: "6px 8px",
             background: connected ? "#333" : "#222",

@@ -454,7 +454,7 @@ export default function ChatCore({ invitePeerId }: ChatCoreProps) {
             gap: 6,
           }}
         >
-          <span style={{ fontSize: 18 }}>🚨</span>
+          <span style={{ fontSize: 18, display: 'inline-block', animation: 'pulse 2s ease-in-out infinite' }}>🚨</span>
           <span style={{ fontSize: 10 }}>CLEAR ALL</span>
         </button>
       </div>

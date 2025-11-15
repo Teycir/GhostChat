@@ -32,7 +32,7 @@ function ChatContent() {
           alt="Ghost"
           width={180}
           height={180}
-          style={{ marginBottom: 30, opacity: 0.9 }}
+          style={{ marginBottom: 30, opacity: 0.9, animation: 'float 3s ease-in-out infinite' }}
         />
         <h1 style={{
           fontSize: 64,
@@ -45,13 +45,12 @@ function ChatContent() {
         <p style={{
           fontSize: 22,
           marginBottom: 50,
-          opacity: 0.7,
           maxWidth: 500,
           textAlign: 'center',
-          lineHeight: 1.5
+          lineHeight: 1.5,
+          animation: 'vanishOnce 24s ease-out forwards'
         }}>
-          Your messages vanish like ghosts. <br />
-          Direct P2P chat with zero traces.
+          Your messages vanish like ghosts.
         </p>
         <button
           onClick={() => setJoined(true)}
