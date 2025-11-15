@@ -1,10 +1,27 @@
 # Changelog
 
+## [0.9.3] - 2025-01-15
+
+### Added
+- **Connection Fingerprint Display**: Emoji verification now shows on connection
+- **Fingerprint Screenshot**: Added fingerprint.png to README screenshots
+- **Simple Explanation**: Added user-friendly explanation of fingerprint mechanism with real-world analogy
+
+### Changed
+- **Placeholder Text**: Updated to "Type a message and hit enter..."
+- **README Documentation**: Enhanced fingerprint section with simple and technical explanations
+
+### Fixed
+- **Fingerprint Generation**: Fixed emoji fingerprint to display correctly when peers connect
+- **Peer ID Passing**: Updated all protocol layers to pass remote peer ID in onConnect callback
+
+---
+
 ## [0.9.2] - 2025-01-15
 
 ### Added
 - **Screenshots Section**: Added landing page and chat interface screenshots to README
-- **Visual Documentation**: Embedded images showing GhostChat UI (landingpage.png, chatboard.png)
+- **Visual Documentation**: Embedded images showing GhostChat UI (landingpage.png, chatboard.png, copylink.png)
 
 ### Changed
 - **README Enhancement**: Improved visual presentation with screenshot gallery

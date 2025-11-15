@@ -6,7 +6,7 @@ let peerId: string | null = null;
 export async function initPeer(
   roomId: string,
   onMessage: (peerId: string, data: string) => void,
-  onConnect: () => void,
+  onConnect: (remotePeerId?: string) => void,
   onDisconnect?: (reason?: string) => void,
   onFallback?: () => void
 ): Promise<{ id: string } | null> {
@@ -44,7 +44,7 @@ export async function initPeer(
 export function connectToPeer(
   remotePeerId: string,
   onMessage: (peerId: string, data: string) => void,
-  onConnect: () => void,
+  onConnect: (remotePeerId?: string) => void,
   onDisconnect?: (reason?: string) => void
 ) {
   const wrappedOnMessage = (fromPeerId: string, data: string) => {

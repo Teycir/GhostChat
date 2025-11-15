@@ -13,7 +13,7 @@ const CONFIG = {
 
 export async function initPeerJS(
   onMessage: (peerId: string, data: string) => void,
-  onConnect: () => void,
+  onConnect: (remotePeerId?: string) => void,
   onDisconnect?: (reason?: string) => void
 ): Promise<string | null> {
   return new Promise((resolve, reject) => {
@@ -46,7 +46,7 @@ export async function initPeerJS(
 function setupConnection(
   conn: DataConnection,
   onMessage: (peerId: string, data: string) => void,
-  onConnect: () => void,
+  onConnect: (remotePeerId?: string) => void,
   onDisconnect?: (reason?: string) => void
 ) {
   connections.set(conn.peer, conn);
@@ -57,7 +57,7 @@ function setupConnection(
 
   conn.on('open', () => {
     console.log('[PEERJS] Connection open:', conn.peer);
-    onConnect();
+    onConnect(conn.peer);
   });
 
   conn.on('close', () => {
@@ -80,7 +80,7 @@ function setupConnection(
 export function connectPeerJS(
   remotePeerId: string,
   onMessage: (peerId: string, data: string) => void,
-  onConnect: () => void,
+  onConnect: (remotePeerId?: string) => void,
   onDisconnect?: (reason?: string) => void
 ) {
   if (!peer) throw new Error('Peer not initialized');

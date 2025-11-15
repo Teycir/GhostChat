@@ -7,13 +7,13 @@ let myId: string | null = null;
 let peer: SimplePeer.Instance | null = null;
 let remotePeerId: string | null = null;
 let storedOnMessage: ((peerId: string, data: string) => void) | null = null;
-let storedOnConnect: (() => void) | null = null;
+let storedOnConnect: ((remotePeerId?: string) => void) | null = null;
 let storedOnDisconnect: ((reason?: string) => void) | undefined = undefined;
 
 async function tryConnectWorker(
   workerUrl: string,
   onMessage: (peerId: string, data: string) => void,
-  onConnect: () => void,
+  onConnect: (remotePeerId?: string) => void,
   onDisconnect?: (reason?: string) => void
 ): Promise<string | null> {
   storedOnMessage = onMessage;
@@ -73,7 +73,7 @@ async function tryConnectWorker(
 
 export async function initSimplePeer(
   onMessage: (peerId: string, data: string) => void,
-  onConnect: () => void,
+  onConnect: (remotePeerId?: string) => void,
   onDisconnect?: (reason?: string) => void
 ): Promise<string | null> {
   resetWorkerPool();
@@ -101,7 +101,7 @@ export async function initSimplePeer(
 function setupPeer(
   p: SimplePeer.Instance,
   onMessage: (peerId: string, data: string) => void,
-  onConnect: () => void,
+  onConnect: (remotePeerId?: string) => void,
   onDisconnect?: (reason?: string) => void,
   targetPeerId?: string
 ) {
@@ -127,7 +127,7 @@ function setupPeer(
   
   p.on('connect', () => {
     console.log('[SIMPLEPEER] P2P connected');
-    onConnect();
+    onConnect(targetPeerId || remotePeerId || undefined);
     
     const pc = (p as any)._pc;
     if (pc) {
@@ -163,7 +163,7 @@ function setupPeer(
 export function connectSimplePeer(
   targetPeerId: string,
   onMessage: (peerId: string, data: string) => void,
-  onConnect: () => void,
+  onConnect: (remotePeerId?: string) => void,
   onDisconnect?: (reason?: string) => void
 ) {
   console.log('[SIMPLEPEER] Connecting to:', targetPeerId);

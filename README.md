@@ -296,7 +296,18 @@ GhostChat includes a **connection fingerprint** system to detect MITM attacks:
 123456     ← 6-digit verification code
 ```
 
-**How it works:**
+**Simple Explanation:**
+
+Think of it like a secret handshake that only works if you're talking directly:
+
+- When you connect, both you and your peer combine your unique IDs
+- This creates a fingerprint - 4 emojis like a "connection DNA"
+- Both see the SAME emojis if directly connected
+- If someone is in the middle, they have a different ID, so emojis won't match
+
+**Real-world analogy:** You and a friend each write your names on paper, mix them together, and create a unique pattern. If you both see the same pattern, you're talking directly. If an attacker intercepts, they use their own name, creating a different pattern - you'd notice!
+
+**How it works technically:**
 
 1. Both peers generate a deterministic hash from their peer IDs
 2. Hash is displayed as 4 emojis + 6-digit code

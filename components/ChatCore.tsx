@@ -167,7 +167,8 @@ export default function ChatCore({ invitePeerId }: ChatCoreProps) {
         // Ignore any other non-JSON data (likely noise or malformed packets)
       };
 
-      const handleConnect = (peer?: any) => {
+      const handleConnect = (remote?: string, myPeerId?: string) => {
+        console.log('[FINGERPRINT] handleConnect called with remote:', remote, 'myPeerId:', myPeerId);
         setConnected(true);
         setConnecting(false);
         initAudioContext();
@@ -179,16 +180,16 @@ export default function ChatCore({ invitePeerId }: ChatCoreProps) {
           prev.forEach((msg) => sendToAll(msg));
           return [];
         });
-        if (peer) {
-          peerConnection.current = peer;
-          const remote = peer.peer || invitePeerId || '';
-          setRemotePeerId(remote);
-          if (peerId && remote) {
-            const fp = generateFingerprint(peerId, remote);
-            setFingerprint(fp);
-            const code = String(Math.abs(fp.split('').reduce((a, c) => a + c.charCodeAt(0), 0) % 1000000)).padStart(6, '0');
-            setVerificationCode(code);
-          }
+        const remotePeer = remote || invitePeerId || '';
+        const localPeer = myPeerId || peerId;
+        console.log('[FINGERPRINT] remotePeer:', remotePeer, 'localPeer:', localPeer);
+        if (remotePeer && localPeer) {
+          setRemotePeerId(remotePeer);
+          const fp = generateFingerprint(localPeer, remotePeer);
+          console.log('[FINGERPRINT] Generated:', fp);
+          setFingerprint(fp);
+          const code = String(Math.abs(fp.split('').reduce((a, c) => a + c.charCodeAt(0), 0) % 1000000)).padStart(6, '0');
+          setVerificationCode(code);
         }
         startFakeTraffic();
       };
@@ -211,7 +212,7 @@ export default function ChatCore({ invitePeerId }: ChatCoreProps) {
       const peer = await initPeer(
         "",
         handleMessage,
-        handleConnect,
+        (remote?: string) => handleConnect(remote, peer?.id || ''),
         handleDisconnect,
         handleFallback,
       );
@@ -228,7 +229,7 @@ export default function ChatCore({ invitePeerId }: ChatCoreProps) {
           connectToPeer(
             validPeerId || invitePeerId,
             handleMessage,
-            handleConnect,
+            (remote?: string) => handleConnect(remote, peer.id),
             handleDisconnect,
           );
           
