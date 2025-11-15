@@ -18,6 +18,20 @@ No servers storing or reading your conversations. Everything exists only in memo
 
 ---
 
+## 📸 Screenshots
+
+<div align="center">
+
+### Landing Page
+![GhostChat Landing Page](public/assets/landingpage.png)
+
+### Chat Interface
+![GhostChat Interface](public/assets/chatboard.png)
+
+</div>
+
+---
+
 ## 🎯 Why GhostChat?
 
 Most "secure" messaging apps still store your messages on servers. Even Signal and WhatsApp keep metadata. **GhostChat is different:**

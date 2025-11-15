@@ -62,6 +62,9 @@ export default function MessageInput({
           display: "flex",
           gap: 4,
           borderBottom: "1px solid #222",
+          flexWrap: "wrap",
+          width: "100%",
+          boxSizing: "border-box",
         }}
       >
         <button onClick={() => wrapText('# ', '')} disabled={!connected} style={{ padding: "4px 8px", background: connected ? "#222" : "#111", border: "1px solid #333", borderRadius: 4, color: connected ? "#fff" : "#666", cursor: connected ? "pointer" : "not-allowed", fontSize: 11, fontWeight: "bold" }} data-title="# Heading" className="tooltip-btn">H1</button>
@@ -87,6 +90,8 @@ export default function MessageInput({
           padding: 16,
           display: "flex",
           gap: 8,
+          width: "100%",
+          boxSizing: "border-box",
         }}
       >
       <input

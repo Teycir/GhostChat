@@ -73,7 +73,7 @@ export default function ChatCore({ invitePeerId }: ChatCoreProps) {
   const [isTyping, setIsTyping] = useState(false);
   const [latency, setLatency] = useState<number | undefined>(undefined);
   const [searchQuery, setSearchQuery] = useState("");
-  const [selfDestructTimer, setSelfDestructTimer] = useState<number>(0);
+  const [selfDestructTimer, setSelfDestructTimer] = useState<number>(300);
   const [messageLimit, setMessageLimit] = useState<number>(50);
   const [remotePeerId, setRemotePeerId] = useState<string>("");
   const [fingerprint, setFingerprint] = useState<string>("");
@@ -436,7 +436,7 @@ export default function ChatCore({ invitePeerId }: ChatCoreProps) {
   };
 
   return (
-    <div style={{ height: "100vh", display: "flex", flexDirection: "column" }}>
+    <div style={{ height: "100vh", width: "100%", maxWidth: "1400px", margin: "0 auto", display: "flex", flexDirection: "column", overflow: "hidden" }}>
       <ErrorHandler error={error} />
       {fallbackWarning && (
         <div
@@ -502,7 +502,7 @@ export default function ChatCore({ invitePeerId }: ChatCoreProps) {
           <span style={{ fontSize: 10 }}>CLEAR ALL</span>
         </button>
       </div>
-      <div style={{ padding: "0 16px 16px" }}>
+      <div style={{ padding: "8px 16px 16px", display: "flex", flexDirection: "column", alignItems: "center" }}>
         <ConnectionStatus connected={connected} connecting={connecting} latency={latency} />
         {fingerprint && (
           <div style={{ marginTop: 8, padding: 8, background: "#1a1a1a", borderRadius: 6, fontSize: 10, textAlign: "center" }}>
@@ -524,9 +524,9 @@ export default function ChatCore({ invitePeerId }: ChatCoreProps) {
         />
       </div>
 
-      <div style={{ flex: 1, overflow: "auto", padding: 16 }}>
+      <div style={{ flex: 1, overflow: "auto", padding: "16px 32px", width: "100%", maxWidth: "100vw", boxSizing: "border-box" }}>
         {messages.length > 0 && (
-          <div style={{ marginBottom: 12, position: "sticky", top: 0, paddingBottom: 8, zIndex: 10 }}>
+          <div style={{ marginBottom: 12, position: "sticky", top: 0, paddingBottom: 8, zIndex: 10, width: "100%", boxSizing: "border-box" }}>
             <input
               type="text"
               value={searchQuery}
@@ -541,6 +541,7 @@ export default function ChatCore({ invitePeerId }: ChatCoreProps) {
                 color: "#fff",
                 fontSize: 10,
                 outline: "none",
+                boxSizing: "border-box",
               }}
             />
           </div>
@@ -562,9 +563,9 @@ export default function ChatCore({ invitePeerId }: ChatCoreProps) {
       </div>
 
       {uploadProgress && <UploadProgress {...uploadProgress} />}
-      <div style={{ borderTop: "1px solid #333", padding: "8px 16px", display: "flex", gap: 12, alignItems: "center", flexWrap: "wrap", maxWidth: "100%", overflow: "hidden" }}>
+      <div style={{ borderTop: "1px solid #333", padding: "8px 16px", display: "flex", gap: 12, alignItems: "center", flexWrap: "wrap", width: "100%", boxSizing: "border-box" }}>
         <div style={{ display: "flex", gap: 6, alignItems: "center" }}>
-          <label style={{ fontSize: 10, opacity: 0.6, whiteSpace: "nowrap" }}>Self-destruct:</label>
+          <label className="tooltip-btn" data-title="Autodelete after" style={{ fontSize: 10, opacity: 0.6, whiteSpace: "nowrap", cursor: "help" }}>Self-destruct:</label>
           <select
             value={selfDestructTimer}
             onChange={(e) => setSelfDestructTimer(Number(e.target.value))}
@@ -586,7 +587,7 @@ export default function ChatCore({ invitePeerId }: ChatCoreProps) {
           </select>
         </div>
         <div style={{ display: "flex", gap: 6, alignItems: "center" }}>
-          <label style={{ fontSize: 10, opacity: 0.6, whiteSpace: "nowrap" }}>Max messages:</label>
+          <label className="tooltip-btn" data-title="Keep only last N messages" style={{ fontSize: 10, opacity: 0.6, whiteSpace: "nowrap", cursor: "help" }}>Max messages:</label>
           <select
             value={messageLimit}
             onChange={(e) => {
@@ -612,7 +613,7 @@ export default function ChatCore({ invitePeerId }: ChatCoreProps) {
           </select>
         </div>
         <div style={{ display: "flex", gap: 6, alignItems: "center" }}>
-          <label style={{ fontSize: 10, opacity: 0.6, whiteSpace: "nowrap" }}>Timeout:</label>
+          <label className="tooltip-btn" data-title="Auto-disconnect after inactivity" style={{ fontSize: 10, opacity: 0.6, whiteSpace: "nowrap", cursor: "help" }}>Timeout:</label>
           <select
             value={sessionTimeout}
             onChange={(e) => setSessionTimeout(Number(e.target.value))}

@@ -1,5 +1,16 @@
 # Changelog
 
+## [0.9.2] - 2025-01-15
+
+### Added
+- **Screenshots Section**: Added landing page and chat interface screenshots to README
+- **Visual Documentation**: Embedded images showing GhostChat UI (landingpage.png, chatboard.png)
+
+### Changed
+- **README Enhancement**: Improved visual presentation with screenshot gallery
+
+---
+
 ## [0.9.1] - 2025-01-15
 
 ### Added

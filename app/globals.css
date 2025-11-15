@@ -1,48 +1,113 @@
 @keyframes gradientShift {
-  0% { background-position: 0% 50%; }
-  25% { background-position: 100% 50%; }
-  50% { background-position: 50% 100%; }
-  75% { background-position: 0% 50%; }
-  100% { background-position: 0% 50%; }
+  0% {
+    background-position: 0% 50%;
+  }
+  25% {
+    background-position: 100% 50%;
+  }
+  50% {
+    background-position: 50% 100%;
+  }
+  75% {
+    background-position: 0% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
 }
 
 @keyframes haze {
-  0%, 100% { opacity: 0.3; transform: scale(1) translate(0, 0) rotate(0deg); }
-  25% { opacity: 0.5; transform: scale(1.2) translate(10%, -10%) rotate(5deg); }
-  50% { opacity: 0.4; transform: scale(0.9) translate(-10%, 10%) rotate(-5deg); }
-  75% { opacity: 0.5; transform: scale(1.1) translate(5%, -5%) rotate(3deg); }
+  0%,
+  100% {
+    opacity: 0.3;
+    transform: scale(1) translate(0, 0) rotate(0deg);
+  }
+  25% {
+    opacity: 0.5;
+    transform: scale(1.2) translate(10%, -10%) rotate(5deg);
+  }
+  50% {
+    opacity: 0.4;
+    transform: scale(0.9) translate(-10%, 10%) rotate(-5deg);
+  }
+  75% {
+    opacity: 0.5;
+    transform: scale(1.1) translate(5%, -5%) rotate(3deg);
+  }
 }
 
-
-
 @keyframes ghostWisp1 {
-  0% { transform: translateY(0); opacity: 0; }
-  10% { opacity: 0.15; }
-  70% { opacity: 0.15; }
-  100% { transform: translateY(-120vh); opacity: 0; }
+  0% {
+    transform: translateY(0);
+    opacity: 0;
+  }
+  10% {
+    opacity: 0.15;
+  }
+  70% {
+    opacity: 0.15;
+  }
+  100% {
+    transform: translateY(-120vh);
+    opacity: 0;
+  }
 }
 
 @keyframes ghostWisp2 {
-  0% { transform: translateY(0); opacity: 0.3; }
-  20% { opacity: 0.25; }
-  40% { opacity: 0.18; }
-  60% { opacity: 0.1; }
-  80% { opacity: 0.05; }
-  100% { transform: translateY(-120vh); opacity: 0; }
+  0% {
+    transform: translateY(0);
+    opacity: 0.3;
+  }
+  20% {
+    opacity: 0.25;
+  }
+  40% {
+    opacity: 0.18;
+  }
+  60% {
+    opacity: 0.1;
+  }
+  80% {
+    opacity: 0.05;
+  }
+  100% {
+    transform: translateY(-120vh);
+    opacity: 0;
+  }
 }
 
 @keyframes ghostWisp3 {
-  0% { transform: translateY(0); opacity: 0; }
-  10% { opacity: 0.18; }
-  70% { opacity: 0.18; }
-  100% { transform: translateY(-120vh); opacity: 0; }
+  0% {
+    transform: translateY(0);
+    opacity: 0;
+  }
+  10% {
+    opacity: 0.18;
+  }
+  70% {
+    opacity: 0.18;
+  }
+  100% {
+    transform: translateY(-120vh);
+    opacity: 0;
+  }
 }
 
 @keyframes ghostWisp4 {
-  0% { transform: translateY(0); opacity: 0; }
-  10% { opacity: 0.1; }
-  70% { opacity: 0.1; }
-  100% { transform: translateY(-120vh); opacity: 0; }
+  0% {
+    transform: translateY(0);
+    opacity: 0;
+  }
+  10% {
+    opacity: 0.1;
+  }
+  70% {
+    opacity: 0.1;
+  }
+  100% {
+    transform: translateY(-120vh);
+    opacity: 0;
+  }
 }
 
 body {
@@ -66,52 +131,88 @@ body {
 }
 
 html {
-  overflow-x: hidden;
+  overflow-x: hidden !important;
   max-width: 100vw;
 }
 
+html,
+body,
+#__next,
+#__next > div {
+  overflow-x: hidden !important;
+  max-width: 100vw !important;
+}
+
 body::before {
-  content: '';
+  content: "";
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
   background:
-    radial-gradient(ellipse at 15% 20%, rgba(138, 43, 226, 0.15) 0%, transparent 50%),
-    radial-gradient(ellipse at 85% 80%, rgba(75, 0, 130, 0.12) 0%, transparent 50%),
-    radial-gradient(circle at 50% 50%, rgba(72, 61, 139, 0.08) 0%, transparent 60%);
+    radial-gradient(
+      ellipse at 15% 20%,
+      rgba(138, 43, 226, 0.15) 0%,
+      transparent 50%
+    ),
+    radial-gradient(
+      ellipse at 85% 80%,
+      rgba(75, 0, 130, 0.12) 0%,
+      transparent 50%
+    ),
+    radial-gradient(
+      circle at 50% 50%,
+      rgba(72, 61, 139, 0.08) 0%,
+      transparent 60%
+    );
   pointer-events: none;
   z-index: 0;
 }
 
 body::after {
-  content: '';
+  content: "";
   position: fixed;
   top: -50%;
   left: -50%;
   width: 200%;
   height: 200%;
   background:
-    radial-gradient(circle at 30% 40%, rgba(147, 112, 219, 0.15) 0%, transparent 30%),
-    radial-gradient(circle at 70% 60%, rgba(123, 104, 238, 0.12) 0%, transparent 35%),
-    radial-gradient(circle at 50% 80%, rgba(138, 43, 226, 0.1) 0%, transparent 40%),
-    radial-gradient(circle at 20% 70%, rgba(75, 0, 130, 0.08) 0%, transparent 35%),
-    radial-gradient(circle at 80% 30%, rgba(106, 90, 205, 0.1) 0%, transparent 40%);
+    radial-gradient(
+      circle at 30% 40%,
+      rgba(147, 112, 219, 0.15) 0%,
+      transparent 30%
+    ),
+    radial-gradient(
+      circle at 70% 60%,
+      rgba(123, 104, 238, 0.12) 0%,
+      transparent 35%
+    ),
+    radial-gradient(
+      circle at 50% 80%,
+      rgba(138, 43, 226, 0.1) 0%,
+      transparent 40%
+    ),
+    radial-gradient(
+      circle at 20% 70%,
+      rgba(75, 0, 130, 0.08) 0%,
+      transparent 35%
+    ),
+    radial-gradient(
+      circle at 80% 30%,
+      rgba(106, 90, 205, 0.1) 0%,
+      transparent 40%
+    );
   filter: blur(100px);
   animation: haze 35s ease-in-out infinite;
   pointer-events: none;
   z-index: 0;
 }
 
-
-
 body > * {
   position: relative;
   z-index: 1;
 }
-
-
 
 .ghost-wisp {
   position: fixed;
@@ -137,7 +238,10 @@ body > * {
   max-width: 100%;
 }
 
-img, video, canvas, svg {
+img,
+video,
+canvas,
+svg {
   max-width: 100%;
   height: auto;
 }
@@ -166,7 +270,7 @@ img, video, canvas, svg {
 }
 
 .tooltip-btn[data-title]::before {
-  content: '';
+  content: "";
   position: absolute;
   bottom: 100%;
   left: 50%;
@@ -204,7 +308,7 @@ img, video, canvas, svg {
 }
 
 .tooltip-btn-bottom[data-title]::before {
-  content: '';
+  content: "";
   position: absolute;
   top: 100%;
   left: 50%;
@@ -223,18 +327,33 @@ img, video, canvas, svg {
 }
 
 @keyframes float {
-  0%, 100% { transform: translateY(0px); }
-  50% { transform: translateY(-10px); }
+  0%,
+  100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
 }
 
 @keyframes pulseBtn {
-  0%, 100% { transform: scale(1); }
-  50% { transform: scale(1.05); }
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
 }
 
 @keyframes floatBtn {
-  0%, 100% { transform: translateY(0px); }
-  50% { transform: translateY(-8px); }
+  0%,
+  100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-8px);
+  }
 }
 
 .ghost-icon {
@@ -242,22 +361,36 @@ img, video, canvas, svg {
 }
 
 @keyframes vanishOnce {
-  0% { opacity: 0.7; }
-  100% { opacity: 0; }
+  0% {
+    opacity: 0.7;
+  }
+  100% {
+    opacity: 0;
+  }
 }
 
 .vanish-text {
-  animation: vanishOnce 8s ease-in-out forwards;
+  animation: vanishOnce 30s ease-in-out forwards;
 }
 
 @keyframes pulse {
-  0%, 100% { transform: scale(1); }
-  50% { transform: scale(1.05); }
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
 }
 
 @keyframes bounce {
-  0%, 100% { transform: scale(1); }
-  50% { transform: scale(1.2); }
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.2);
+  }
 }
 
 button {
@@ -289,7 +422,7 @@ button:active {
 
 .start-btn {
   padding: 16px 48px;
-  background: linear-gradient(135deg, #fd0 0%, #fa0 100%);
+  background: linear-gradient(135deg, #fff 0%, #f0f0f0 50%, #e0e0e0 100%);
   color: #000;
   border: none;
   border-radius: 12px;
@@ -298,16 +431,17 @@ button:active {
   cursor: pointer;
   transition: all 0.3s ease;
   animation: pulseBtn 2s ease-in-out infinite;
+  box-shadow: 0 4px 12px rgba(255, 255, 255, 0.2);
 }
 
 .start-btn:hover {
-  filter: brightness(1.2);
-  box-shadow: 0 8px 20px rgba(255, 221, 0, 0.3);
+  background: linear-gradient(135deg, #fff 0%, #fafafa 50%, #f0f0f0 100%);
+  box-shadow: 0 8px 24px rgba(255, 255, 255, 0.4);
   transform: translateY(-2px);
 }
 
 .start-btn:active {
-  filter: brightness(0.9);
+  filter: brightness(0.95);
   transform: translateY(0);
 }
 
@@ -316,8 +450,8 @@ button:active {
 }
 
 .how-to-btn:hover {
-  filter: brightness(1.15);
-  box-shadow: 0 6px 16px rgba(255, 221, 0, 0.2);
+  background: linear-gradient(135deg, #fff 0%, #fafafa 50%, #f0f0f0 100%);
+  box-shadow: 0 6px 20px rgba(255, 255, 255, 0.3);
   transform: translateY(-2px);
 }
 
@@ -345,5 +479,3 @@ select option:hover {
   background: #fa0 !important;
   color: #000 !important;
 }
-
-

@@ -24,7 +24,18 @@ export default function InviteSection({
     <div style={{ marginTop: 12 }}>
       {!linkCreated ? (
         <button
-          onClick={() => setLinkCreated(true)}
+          onClick={async () => {
+            setLinkCreated(true);
+            if (inviteLink) {
+              try {
+                await navigator.clipboard.writeText(inviteLink);
+                setCopied(true);
+                setTimeout(() => setCopied(false), 2000);
+              } catch (err) {
+                console.error("Clipboard failed:", err);
+              }
+            }
+          }}
           disabled={!peerId}
           style={{
             padding: "6px 12px",
@@ -47,17 +58,31 @@ export default function InviteSection({
                 Share this link with peer:
               </div>
               <div
+                onClick={async () => {
+                  try {
+                    await navigator.clipboard.writeText(inviteLink);
+                    setCopied(true);
+                    setTimeout(() => setCopied(false), 2000);
+                  } catch (err) {
+                    console.error("Clipboard failed:", err);
+                  }
+                }}
                 style={{
                   padding: 8,
-                  background: "#1a1a1a",
+                  background: copied ? "#fd0" : "#1a1a1a",
                   borderRadius: 6,
                   wordBreak: "break-all",
                   fontSize: 10,
                   marginBottom: 8,
                   border: "1px solid #333",
+                  cursor: "pointer",
+                  transition: "background 0.2s",
+                  color: copied ? "#000" : "#fff",
+                  fontWeight: copied ? 600 : 400,
+                  textAlign: copied ? "center" : "left",
                 }}
               >
-                {inviteLink}
+                {copied ? "✓ Copied!" : inviteLink}
               </div>
             </>
           ) : (
@@ -68,29 +93,6 @@ export default function InviteSection({
           {inviteLink && (
             <>
               <div style={{ display: "flex", gap: 8, marginBottom: 8 }}>
-                <button
-                  onClick={async () => {
-                    try {
-                      await navigator.clipboard.writeText(inviteLink);
-                      setCopied(true);
-                      setTimeout(() => setCopied(false), 2000);
-                    } catch (err) {
-                      console.error("Clipboard failed:", err);
-                    }
-                  }}
-                  style={{
-                    padding: "6px 12px",
-                    background: copied ? "linear-gradient(135deg, #fd0 0%, #fa0 100%)" : "linear-gradient(135deg, #fff 0%, #eee 100%)",
-                    border: "none",
-                    borderRadius: 6,
-                    color: "#000",
-                    fontSize: 10,
-                    cursor: "pointer",
-                    fontWeight: 600,
-                  }}
-                >
-                  {copied ? "Copied!" : "Copy Link"}
-                </button>
                 <button
                   onClick={() => setShowQR(!showQR)}
                   style={{
