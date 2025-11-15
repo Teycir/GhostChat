@@ -23,13 +23,20 @@ No servers storing or reading your conversations. Everything exists only in memo
 <div align="center">
 
 ### Landing Page
+
 ![GhostChat Landing Page](public/assets/landingpage.png)
 
+### Copy Invite Link
+
+![Copy Invite Link](public/assets/copylink.png)
+
 ### Chat Interface
+
 ![GhostChat Interface](public/assets/chatboard.png)
 
-### Copy Invite Link
-![Copy Invite Link](public/assets/copylink.png)
+### Connection Fingerprint (MITM Protection)
+
+![Connection Fingerprint](public/assets/fingerprint.png)
 
 </div>
 
@@ -256,6 +263,7 @@ ghostchat/
 GhostChat is vulnerable to MITM attacks during the initial connection phase. Here's how:
 
 **1. Signaling Server Compromise**
+
 - The Cloudflare Worker facilitates WebRTC handshake (SDP exchange)
 - A compromised signaling server could intercept and modify:
   - Session Description Protocol (SDP) offers/answers
@@ -264,6 +272,7 @@ GhostChat is vulnerable to MITM attacks during the initial connection phase. Her
 - Result: Attacker establishes two separate connections (A↔Attacker↔B)
 
 **2. Invite Link Interception**
+
 - Invite links contain the peer ID: `https://ghost-chat.pages.dev/chat?peer=abc123`
 - If shared via insecure channel (SMS, unencrypted email, public chat):
   - Attacker intercepts link and connects first
@@ -271,6 +280,7 @@ GhostChat is vulnerable to MITM attacks during the initial connection phase. Her
 - Result: Both parties unknowingly chat with the attacker
 
 **3. Network-Level Attack**
+
 - Attacker on same WiFi/network can:
   - Perform DNS spoofing to redirect traffic
   - Intercept WebRTC negotiation packets
@@ -287,12 +297,14 @@ GhostChat includes a **connection fingerprint** system to detect MITM attacks:
 ```
 
 **How it works:**
+
 1. Both peers generate a deterministic hash from their peer IDs
 2. Hash is displayed as 4 emojis + 6-digit code
 3. **If connection is direct:** Both see IDENTICAL fingerprint
 4. **If MITM present:** Each sees DIFFERENT fingerprint (because attacker has different peer ID)
 
 **Example:**
+
 ```
 Direct Connection:
   Alice sees: 🔴🟢🔵🟡 (hash of Alice+Bob)
@@ -364,6 +376,7 @@ MITM Attack:
 ### Browser Compatibility
 
 **Supported Browsers:**
+
 - Chrome/Chromium (recommended)
 - Firefox
 - Edge
@@ -371,6 +384,7 @@ MITM Attack:
 - Brave (with shields down for this site)
 
 **Not Compatible:**
+
 - LibreWolf - WebRTC is disabled by default for privacy
 - Tor Browser - WebRTC is blocked for anonymity
 - Browsers with strict WebRTC blocking
