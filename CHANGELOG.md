@@ -1,5 +1,32 @@
 # Changelog
 
+## [0.9.0] - 2025-01-18
+
+### Added
+- **Enhanced Background**: Beautiful purple/indigo gradient with ethereal glowing effects
+- **Animated Background**: Smooth multi-directional movement with rotation (25s gradient, 35s haze)
+- **Ghost Wisp Animation**: Single ascending ghost with aggressive fade (60s duration, plays once)
+- **Landing Page Animations**: Floating ghost image with vanishing subtitle text (8s fade)
+- **Button Pulse Effect**: Start Chatting button scales smoothly instead of vertical movement
+- **Disconnect Synchronization**: Both peers redirect to chat page when one disconnects
+
+### Changed
+- **Dropdown Styling**: Yellow accent colors (#fd0) instead of blue for all select elements
+- **Ghost Animation**: Optimized single ghost wisp starting off-screen (bottom: -80px)
+- **Background Colors**: Deep purple/indigo tones (violet, indigo, slate blue) for mystical theme
+- **Blur Effects**: Enhanced to 100px for dreamy atmosphere
+- **Animation Timing**: Ghost floats slower with gradual opacity fade (0.3 → 0)
+
+### Technical
+- Added disconnect signal protocol (type: "disconnect") for P2P sync
+- Implemented beforeunload event to notify peer on tab close
+- Enhanced CSS with rotation and multi-directional transforms
+- Optimized ghost wisp positioning and animation keyframes
+- Added pulseBtn animation for button scale effect
+- Restored original ghost image asset with floating animation
+
+---
+
 ## [0.8.0] - 2025-01-18
 
 ### Added
