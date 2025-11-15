@@ -1,436 +1,391 @@
-# GhostChat: Ephemeral P2P Chat
+<div align="center">
 
-> Your messages vanish like ghosts. **True peer-to-peer** chat where messages travel directly between users - no servers storing or reading your conversations. Everything exists only in memory and disappears when you close the tab. Zero traces, zero history.
+# 👻 GhostChat
 
-[![p2p](https://img.shields.io/badge/p2p-enabled-blue)](https://github.com/topics/p2p)
-[![privacy](https://img.shields.io/badge/privacy-first-green)](https://github.com/topics/privacy)
-[![webrtc](https://img.shields.io/badge/webrtc-powered-orange)](https://github.com/topics/webrtc)
-[![nextjs](https://img.shields.io/badge/nextjs-15-black)](https://github.com/topics/nextjs)
-[![simple-peer](https://img.shields.io/badge/simple--peer-enabled-yellow)](https://github.com/topics/simple-peer)
-[![cloudflare](https://img.shields.io/badge/cloudflare-workers-orange)](https://github.com/topics/cloudflare)
-[![pwa](https://img.shields.io/badge/pwa-installable-purple)](https://github.com/topics/pwa)
-[![license](https://img.shields.io/badge/license-MIT-blue)](LICENSE)
+### Your messages vanish like ghosts
+
+**True peer-to-peer chat where messages travel directly between users.**  
+No servers storing or reading your conversations. Everything exists only in memory and disappears when you close the tab.
+
+[![MIT License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
+[![Next.js](https://img.shields.io/badge/Next.js-15-black)](https://nextjs.org)
+[![WebRTC](https://img.shields.io/badge/WebRTC-P2P-orange)](https://webrtc.org)
+[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](CONTRIBUTING.md)
+
+[Live Demo](https://ghostchat.example.com) • [Documentation](#documentation) • [Contributing](CONTRIBUTING.md) • [Changelog](CHANGELOG.md)
+
+</div>
 
 ---
 
-## Disclaimer
+## 🎯 Why GhostChat?
 
-This project is shared for educational purposes only. Users are responsible for complying with all applicable laws and regulations. Do not use this tool for illegal activities. The developers assume no liability for misuse.
+Most "secure" messaging apps still store your messages on servers. Even Signal and WhatsApp keep metadata. **GhostChat is different:**
+
+- ✅ **True P2P** - Messages travel directly between users via WebRTC
+- ✅ **Zero server storage** - No databases, no logs, no message history
+- ✅ **Memory-only** - Everything stored in RAM, wiped on tab close
+- ✅ **No accounts** - No phone numbers, emails, or persistent identity
+- ✅ **Self-destructing** - Messages auto-delete after 5s, 30s, 1m, or 5m
+- ✅ **Open source** - Fully auditable code (MIT license)
+
+**Perfect for:** Journalists, whistleblowers, activists, lawyers, executives, or anyone who values true privacy.
 
 ---
 
-## For Users
+## ✨ Features
 
-### What is GhostChat?
+### 🔒 Privacy & Security
 
-GhostChat is a truly private chat app where messages travel directly between you and your peer - no servers storing or reading your conversations. When you close the tab, everything vanishes completely. No history, no traces, no tracking. Your messages are ghosts that disappear.
+- **Direct P2P connections** - Messages never touch servers
+- **E2E encryption** - WebRTC native DTLS/SRTP
+- **Memory-only storage** - Zero disk traces, no forensics possible
+- **Ephemeral identity** - Random peer ID per session
+- **Auto-clear on close** - All data wiped when tab closes
+- **Connection fingerprint** - 4-emoji hash to verify no MITM
+- **Sensitive content blur** - Auto-detect and blur passwords, SSN, credit cards
+- **Metadata stripping** - Remove EXIF data from images
+- **Anti-forensics** - Memory overwrite on message delete
 
-### How to Use
+### 💬 Messaging
 
-**Step 1: Create a room**
+- **Self-destructing messages** - Timer: 5s, 30s, 1m, 5m, or never
+- **Message deletion** - Delete for both sides with P2P sync
+- **Read receipts** - Single/double checkmark delivery status
+- **Typing indicators** - See when peer is typing
+- **Markdown support** - 16 formatting buttons (bold, italic, code, etc.)
+- **Quick emojis** - 15 one-click emoji buttons
+- **Message search** - Real-time filtering with highlighting
+- **Copy protection** - Clipboard auto-clears after 10 seconds
 
-- Open the website
+### 📁 File Sharing
+
+- **P2P file transfer** - Send files up to 10MB directly
+- **Chunked transfer** - Reliable transmission via 64KB chunks
+- **Upload progress** - Real-time progress bar
+- **Image preview** - Inline display for images
+- **Metadata stripping** - EXIF removal from images
+
+### 🚨 Emergency Features
+
+- **Panic button** - Clear all messages instantly (Ctrl+Shift+X)
+- **Message limit** - Auto-cleanup (10, 25, 50, or 100 messages)
+- **Session timeout** - Auto-disconnect after inactivity (5m-1h)
+- **Screen blur** - Auto-blur on tab switch or idle
+
+### 🌐 Infrastructure
+
+- **$0 operating costs** - Cloudflare Workers signaling (200k requests/day)
+- **Automatic fallback** - Worker 1 → Worker 2 → PeerJS backup
+- **PWA support** - Installable as desktop/mobile app
+- **No tracking** - Zero analytics, telemetry, or user data collection
+
+---
+
+## 🚀 Quick Start
+
+### For Users
+
+**1. Visit the app:**
+
+```
+https://ghostchat.example.com
+```
+
+**2. Create a room:**
+
 - Click "Start Chatting"
 - Click "Create Room"
-- You'll see a "Copy Invite Link" button
+- Copy the invite link
 
-**Step 2: Share the invite link**
+**3. Share with peer:**
 
-- Click "Copy Invite Link"
-- Share the link with your peer (via text, email, WhatsApp, etc.)
+- Send invite link via text, email, or any channel
+- Peer clicks link and connects automatically
 
-**Step 3: Your peer joins**
+**4. Chat privately:**
 
-- They click your invite link
-- Opens directly in their browser
-- Automatically connects to you
+- Messages travel directly between you (P2P)
+- Close tab when done - everything vanishes
 
-**Step 4: Chat directly**
+### For Developers
 
-- Once connected, you'll see "Connected" status
-- Type messages and press Enter to send
-- See "Peer is typing..." when they're composing
-- Click any message to copy it
-- Messages travel directly between you (peer-to-peer)
-- Share files up to 10MB
-
-**Step 5: End the chat**
-
-- Close the browser tab
-- All messages instantly disappear from memory
-- Invite link expires
-- No history, no traces left behind
-
-**Important**: Both people must be online at the same time. If someone closes their tab, the connection ends.
-
-### Key Features
-
-- **Direct P2P**: Messages and files never touch servers
-- **Self-Destructing Messages**: Auto-delete after 5s, 30s, 1m, or 5m
-- **Message Deletion**: Delete messages for both sides with sync
-- **Read Receipts**: Single/double checkmark delivery status
-- **Panic Button**: Clear all messages instantly (Ctrl+Shift+X)
-- **Sensitive Content Blur**: Auto-blur passwords, SSN, credit cards
-- **Connection Fingerprint**: Emoji verification to prevent MITM
-- **Clipboard Auto-Clear**: Copied text cleared after 10 seconds
-- **Metadata Stripping**: Remove EXIF data from images
-- **Memory Overwrite**: Anti-forensics random data overwrite
-- **Message Limit**: Configurable max messages (10, 25, 50, 100)
-- **Markdown Support**: Rich text formatting (16 buttons)
-- **Quick Emojis**: 15 one-click emoji buttons
-- **Message Search**: Real-time filtering with highlighting
-- **Connection Quality**: Live latency indicator
-- **Sound Notifications**: Audio alert on new messages
-- **Typing Indicators**: See when peer is typing
-- **File Sharing**: Send files up to 10MB directly P2P
-- **Memory-only**: RAM storage, auto-wipe on tab close
-- **Ephemeral**: New identity each session, no history
-- **Auto-blur**: Screen protection when switching tabs
-- **Zero tracking**: No analytics, logs, or user data
-- **Open source**: Fully auditable code
-
-### Example Scenarios
-
-**Two people chatting (Alice and Bob):**
-
-1. Alice opens GhostChat and clicks "Create Room"
-2. Alice clicks "Copy Invite Link"
-3. Alice texts Bob the invite link
-4. Bob clicks the link and automatically connects to Alice
-5. Both see "Connected" status
-6. They chat privately - messages go directly between them
-7. When done, both close their tabs
-8. All messages vanish - no history exists anywhere
-
-### Limitations
-
-- Invite links expire when creator closes tab
-- Connection success varies by network (70-80%)
-- Corporate firewalls may block WebRTC
-- Both users must be online simultaneously
-- Peers see each other's IP (use VPN to mask)
-- One-to-one only (2 people per room)
-
----
-
-### Custom Server (Optional)
-
-For true decentralization, you can configure your own PeerJS signaling server:
-
-1. Click "Settings" button in the chat interface
-2. Enter your server details (host, port, path, API key)
-3. Save and reload
-
-**Default**: Uses Cloudflare Workers signaling servers with automatic fallback.
-
----
-
-## For Developers
-
-### Quick Start
+**Clone and run locally:**
 
 ```bash
-# Install
+# Clone repository
+git clone https://github.com/teycir/ghostchat.git
+cd ghostchat
+
+# Install dependencies
 npm install
 
-# Run dev server
+# Run development server
 npm run dev
+
 # Open http://localhost:3000
-
-# Test P2P
-# Tab 1: localhost:3000/chat -> Click "Create Room" -> Copy invite link
-# Tab 2: Paste the invite link (e.g., localhost:3000/chat?peer=abc123)
-# Send messages between tabs
-
-# Build for production
-npm run build
 ```
+
+**Test P2P locally:**
+
+```bash
+# Terminal 1
+npm run dev
+
+# Browser Tab 1: localhost:3000/chat
+# Click "Create Room" → Copy invite link
+
+# Browser Tab 2: Paste invite link
+# Messages sync via WebRTC P2P
+```
+
+**Build for production:**
+
+```bash
+npm run build
+npm start
+
+# Or deploy static export
+npm run build
+# Upload /out directory to any static host
+```
+
+---
+
+## 🏗️ Architecture
+
+### How P2P Works
+
+```
+User A                    Signaling Server              User B
+  |                              |                         |
+  |------ Create Room ---------->|                         |
+  |<----- Peer ID: abc123 -------|                         |
+  |                              |                         |
+  |                              |<----- Join: abc123 -----|
+  |<---- WebRTC Offer -----------|------ Forward Offer --->|
+  |<---- ICE Candidates ---------|------ Forward ICE ----->|
+  |                              |                         |
+  |<========== Direct P2P Connection ===================>|
+  |                              |                         |
+  |-- "Hello!" ------------------------------------------>|
+  |<----------------------------------------- "Hi!" ------|
+  |                              |                         |
+  (Signaling server no longer involved)
+```
+
+**Key Points:**
+
+1. Signaling server only helps establish connection (WebRTC SDP exchange)
+2. Once connected, messages flow directly peer-to-peer
+3. Server never sees message content
+4. Connection uses WebRTC DataChannels (DTLS encrypted)
 
 ### Tech Stack
 
-- **Next.js 15**: Static export, App Router, TypeScript
-- **simple-peer**: Primary P2P protocol with custom signaling
-- **PeerJS**: Backup P2P protocol (automatic fallback)
-- **Cloudflare Workers**: Self-hosted signaling servers (2 workers)
-- **React**: UI components
-- **PWA**: Installable app
-
-### Architecture
-
-**How P2P Works**:
-
-1. User creates room → Generates unique peer ID
-2. Invite link shared → Contains peer ID in URL (`?peer=abc123`)
-3. peer clicks link → Extracts peer ID from URL
-4. Direct connection → WebRTC P2P link established
-5. Messages flow → Direct peer-to-peer (no server involved)
-6. Tab closes → Everything wiped from memory
-
-**Infrastructure**:
-
-- Static hosting (Cloudflare Pages - free)
-- Custom Cloudflare Workers signaling (200k requests/day)
-- Automatic fallback (Worker 1 → Worker 2 → PeerJS backup)
-- Public STUN servers (Google/Mozilla - free)
-- 100% free, decentralized infrastructure
+- **Frontend:** Next.js 15, React, TypeScript
+- **P2P Protocol:** simple-peer (primary), PeerJS (fallback)
+- **Signaling:** Cloudflare Workers (self-hosted)
+- **Styling:** CSS-in-JS (no external CSS frameworks)
+- **Storage:** Memory-only (no localStorage/IndexedDB)
+- **Deployment:** Static export (Cloudflare Pages, Vercel, Netlify)
 
 ### Project Structure
 
 ```
-app/
-├── layout.tsx          # Root layout + SEO
-├── globals.css         # Global styles
-├── page.tsx            # Landing page
-└── chat/page.tsx       # Chat page
-
-components/
-└── ChatCore.tsx        # Chat UI + P2P logic
-
-lib/
-├── peer-manager.ts     # PeerJS P2P connections
-├── storage.ts          # Memory storage
-└── identity.ts         # Ephemeral IDs
-
-public/
-├── manifest.json       # PWA manifest
-├── sw.js               # Service worker
-└── icon-*.png          # PWA icons
+ghostchat/
+├── app/                    # Next.js App Router
+│   ├── page.tsx           # Landing page
+│   ├── chat/page.tsx      # Chat page
+│   └── globals.css        # Global styles
+├── components/            # React components
+│   ├── ChatCore.tsx       # Main chat logic
+│   ├── MessageList.tsx    # Message rendering
+│   └── ...
+├── lib/                   # Core libraries
+│   ├── peer-manager.ts    # P2P connection manager
+│   ├── storage.ts         # Memory-only storage
+│   ├── file-transfer.ts   # Chunked file transfer
+│   └── ...
+├── public/                # Static assets
+│   ├── manifest.json      # PWA manifest
+│   └── sw.js             # Service worker
+└── tests/                 # Test suite
 ```
 
-### Development
+---
 
-**Local Testing**:
+## 🔐 Security
+
+### Threat Model
+
+**What GhostChat protects against:**
+
+- ✅ Server-side data breaches (no server storage)
+- ✅ Message interception (E2E encrypted)
+- ✅ Forensic analysis (memory-only, no disk traces)
+- ✅ Persistent surveillance (ephemeral sessions)
+- ✅ Metadata collection (no accounts, minimal logs)
+
+**What GhostChat does NOT protect against:**
+
+- ❌ Compromised devices (keyloggers, screen capture)
+- ❌ Man-in-the-middle attacks (verify fingerprint!)
+- ❌ IP address exposure (peers see each other's IPs - use VPN)
+- ❌ Browser vulnerabilities (keep browser updated)
+
+### Security Best Practices
+
+1. **Verify connection fingerprint** - Compare 4-emoji hash out-of-band
+2. **Use VPN** - Hide your IP address from peer
+3. **Secure device** - Keep OS and browser updated
+4. **Private browsing** - Use incognito/private mode
+5. **Trusted network** - Avoid public WiFi without VPN
+
+### Security Audits
+
+- [ ] Independent security audit (planned)
+- [ ] Penetration testing (planned)
+- [ ] Bug bounty program (planned)
+
+**Found a vulnerability?** Please report responsibly to [teycir@pxdmail.net](mailto:teycir@pxdmail.net)
+
+---
+
+## 📊 Comparison
+
+| Feature              | GhostChat | Signal      | WhatsApp    | Telegram    |
+| -------------------- | --------- | ----------- | ----------- | ----------- |
+| **True P2P**         | ✅ Yes    | ❌ No       | ❌ No       | ❌ No       |
+| **Server storage**   | ❌ None   | ✅ Metadata | ✅ Metadata | ✅ Messages |
+| **Requires account** | ❌ No     | ✅ Phone    | ✅ Phone    | ✅ Phone    |
+| **Message history**  | ❌ None   | ✅ Yes      | ✅ Yes      | ✅ Yes      |
+| **Self-destruct**    | ✅ Yes    | ✅ Yes      | ❌ No       | ✅ Yes      |
+| **Open source**      | ✅ Yes    | ✅ Yes      | ❌ No       | ❌ Partial  |
+| **Cost**             | 💰 Free   | 💰 Free     | 💰 Free     | 💰 Free     |
+
+---
+
+## 🛠️ Development
+
+### Prerequisites
+
+- Node.js 18+
+- npm or yarn
+- Modern browser with WebRTC support
+
+### Setup
 
 ```bash
-# Terminal
-npm run dev
+# Install dependencies
+npm install
 
-# Browser Tab 1
-localhost:3000/chat -> Click "Create Room" -> Copy invite link
+# Run tests
+npm test
 
-# Browser Tab 2
-Paste invite link (e.g., localhost:3000/chat?peer=abc123xyz)
+# Run E2E tests
+npm run test:e2e
 
-# Send messages - they sync via WebRTC
+# Lint code
+npm run lint
+
+# Type check
+npm run type-check
 ```
 
-**Multi-Device Testing**:
+### Environment Variables
 
 ```bash
-# Get local IP
-ifconfig | grep "inet " | grep -v 127.0.0.1
-
-# Desktop: http://localhost:3000/chat
-# Mobile: http://YOUR_IP:3000/chat
-# Both join same room
+# Optional: Custom PeerJS server
+NEXT_PUBLIC_PEERJS_HOST=your-server.com
+NEXT_PUBLIC_PEERJS_PORT=443
+NEXT_PUBLIC_PEERJS_PATH=/myapp
 ```
 
-**Debug WebRTC**:
+### Contributing
 
-```javascript
-// Browser console
-localStorage.debug = "simple-peer";
-// Reload page
-```
+We welcome contributions! Please see [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines.
 
-### Deployment
+**Ways to contribute:**
+
+- 🐛 Report bugs
+- 💡 Suggest features
+- 🔧 Submit pull requests
+- 📖 Improve documentation
+- 🌍 Add translations
+- 🎨 Design improvements
+
+---
+
+## 🚢 Deployment
+
+### Cloudflare Pages (Recommended)
 
 ```bash
-# Cloudflare Pages (recommended)
 npm run build
 wrangler pages deploy out
+```
 
-# GitHub Pages
+### Vercel
+
+```bash
 npm run build
-gh-pages -d out
+vercel --prod
+```
 
-# Any static host
+### Self-Hosted
+
+```bash
 npm run build
-# Upload /out directory
+# Upload /out directory to any static host
+# Nginx, Apache, S3, etc.
 ```
 
-## Core Concepts
+### Docker
 
-### Memory-Only Storage
-
-Messages stored in RAM only, disappear when tab closes (zero disk traces):
-
-```typescript
-// Memory-only storage - no localStorage, no IndexedDB
-let messages: Message[] = []; // RAM only
-
-function storeMessage(msg: Message) {
-  messages.push({ text: msg.text }); // No timestamps, no metadata
-  if (messages.length > 100) messages.shift(); // Keep last 100
-}
-
-function getMessages() {
-  return messages;
-}
-
-// Auto-clear when tab closes
-window.addEventListener("beforeunload", () => {
-  messages = []; // Wipe from memory
-});
+```bash
+docker build -t ghostchat .
+docker run -p 3000:3000 ghostchat
 ```
 
-### Ephemeral Identity
+## 📄 License
 
-Random peer ID per session, no persistent identity tracking:
+MIT License - see [LICENSE](LICENSE) file for details.
 
-```typescript
-// Generate new identity each session
-function generateIdentity() {
-  return {
-    peerId: crypto.randomUUID(), // Built-in browser API
-    // No keys to backup, no persistent identity
-  };
-}
-```
-
-### Privacy UI
-
-Automatic privacy protections with minimal code:
-
-```typescript
-// Blur screen when tab loses focus (shoulder surfing protection)
-document.addEventListener("visibilitychange", () => {
-  document.body.style.filter = document.hidden ? "blur(10px)" : "none";
-});
-
-// Invite links expire after 1 hour
-const inviteExpiry = Date.now() + 3600000;
-if (Date.now() > inviteExpiry) return null;
-```
-
-### P2P Messaging
-
-Messages sent directly peer-to-peer via WebRTC data channels:
-
-```typescript
-// Establish P2P connection
-const peer = await connectToPeer("peer-id");
-
-// Send message directly (no relay)
-peer.send("Hello, world!");
-
-// Listen for direct messages
-peer.on("data", (message) => {
-  console.log(message); // Direct from peer
-});
-```
-
-## Privacy & Security
-
-- **True P2P**: Direct WebRTC connections, no relay
-- **E2E Encryption**: WebRTC native (DTLS/SRTP)
-- **Memory-Only**: RAM storage, zero disk traces
-- **Ephemeral**: Random peer ID per session
-- **Auto-Clear**: All data wiped on tab close
-- **Zero Tracking**: No analytics, telemetry, or accounts
-- **Open Source**: Fully auditable
-
-### Security Notes
-
-- Signaling server sees connection metadata (not messages)
-- Peers see each other's IP addresses (inherent to P2P)
-- No forensics possible (by design)
-- Session isolation prevents linking conversations
-
-## Contributing
-
-We welcome contributions! This is a community-driven project focused on privacy and decentralization.
-
-1. Fork the repository
-2. Create a feature branch
-3. Commit your changes
-4. Push and open a pull request
-
-## Troubleshooting
-
-**Connection failed?**
-
-- Check firewall settings
-- Try different network
-- Some corporate networks block WebRTC
-
-**Messages not syncing?**
-
-- Check both users have same invite link
-- Check browser console for errors
-- Refresh and try again
-
-**Icons not loading?**
-
-- Clear browser cache
-- Restart dev server
+**TL;DR:** Free to use, modify, and distribute. No warranty provided.
 
 ---
 
-## License
+## ⚠️ Disclaimer
 
-MIT License - Open source and free forever
-
-## FAQ
-
-**Is this truly P2P?**  
-Yes. Messages go directly between users via WebRTC. PeerJS signaling server only helps you find each other.
-
-**Can the signaling server see my messages?**  
-No. Signaling server only handles connection setup. Messages are encrypted and go directly peer-to-peer.
-
-**Are messages saved?**  
-No. Everything is stored in RAM only and wiped when you close the tab.
-
-**Do I need an account?**  
-No. No signup, no phone number, no email. Just open and chat.
-
-**Does it work on mobile?**  
-Yes. Works on any modern browser. Can be installed as PWA.
-
-**What if I close the tab?**  
-Everything disappears: messages, identity, connections. Fresh start next time.
-
-**Can someone recover my messages?**  
-No. Memory-only storage means zero disk traces.
-
-**Why not use Signal/WhatsApp?**  
-GhostChat has no central servers, no phone numbers, no persistent identity. Messages truly disappear.
-
-**Can my peer see my IP address?**  
-Yes, that's how P2P works. Use a VPN to mask your IP if needed.
+This project is shared for **educational purposes only**. Users are responsible for complying with all applicable laws and regulations. Do not use this tool for illegal activities. The developers assume no liability for misuse.
 
 ---
 
-**Status**: Beta - Production Ready  
-**Built with**: Next.js, WebRTC, simple-peer, PeerJS  
-**Deployment**: Static PWA (Cloudflare Pages) + 2 Cloudflare Workers  
-**Cost**: $0 forever (free tier infrastructure)  
-**Capacity**: 200,000 requests/day (~10,000 chat sessions)
+## 🙏 Acknowledgments
 
-**✨ v0.6.0 Features**:
+- [simple-peer](https://github.com/feross/simple-peer) - WebRTC library
+- [PeerJS](https://peerjs.com) - Fallback P2P protocol
+- [Next.js](https://nextjs.org) - React framework
+- [Cloudflare Workers](https://workers.cloudflare.com) - Signaling infrastructure
 
-- Self-destructing messages (5s, 30s, 1m, 5m timers)
-- Message deletion synced across peers
-- Read receipts (single/double checkmark)
-- Panic button with keyboard shortcut (Ctrl+Shift+X)
-- Sensitive content auto-blur (passwords, SSN, credit cards)
-- Connection fingerprint verification (4-emoji hash)
-- Clipboard auto-clear after 10 seconds
-- EXIF metadata stripping from images
-- Anti-forensics memory overwrite on delete
-- Configurable message limit (10, 25, 50, 100)
-- Quick emoji picker (15 emojis)
-- Markdown formatting (16 buttons)
-- Message search with highlighting
-- Connection quality indicator
-- Notification sound
-- Typing indicators
-- Read receipts
+---
 
-**⚠️ Limitations**:
+## 💖 Support
 
-- Invite links expire when creator closes tab
-- Connection success varies by network (70-80% cross-network)
-- Free TURN servers may be rate-limited
-- One-to-one chat only
+If you find GhostChat useful, please:
+
+- ⭐ Star this repository
+- 🐦 Share on social media
+- 💰 [Sponsor on GitHub](https://github.com/sponsors/teycir)
+- ☕ [Buy me a coffee](https://buymeacoffee.com/teycir)
+
+---
+
+<div align="center">
+
+**Built with ❤️ for privacy**
+
+[Website](https://ghostchat.example.com) • [GitHub](https://github.com/teycir/ghostchat) • [Twitter](https://twitter.com/ghostchatapp)
+
+</div>
