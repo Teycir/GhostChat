@@ -18,6 +18,12 @@ No servers storing or reading your conversations. Everything exists only in memo
 
 ---
 
+## ⚠️ Disclaimer
+
+**This project is shared for educational purposes only.** Users are responsible for complying with all applicable laws and regulations. Do not use this tool for illegal activities. The developers assume no liability for misuse.
+
+---
+
 ## 📸 Screenshots
 
 <div align="center">
@@ -505,8 +511,6 @@ If you find GhostChat useful, please:
 
 - ⭐ Star this repository
 - 🐦 Share on social media
-- 💰 [Sponsor on GitHub](https://github.com/sponsors/teycir)
-- ☕ [Buy me a coffee](https://buymeacoffee.com/teycir)
 
 ---
 
@@ -514,6 +518,6 @@ If you find GhostChat useful, please:
 
 **Built with ❤️ for privacy**
 
-[Website](https://ghost-chat.pages.dev) • [GitHub](https://github.com/teycir/ghostchat) • [Twitter](https://twitter.com/ghostchatapp)
+[Website](https://ghost-chat.pages.dev) • [GitHub](https://github.com/teycir/ghostchat)
 
 </div>
