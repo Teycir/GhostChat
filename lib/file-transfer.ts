@@ -12,7 +12,7 @@ export interface FileTransferResult {
 }
 
 const MAX_FILE_SIZE = 10 * 1024 * 1024;
-const CHUNK_SIZE = 64 * 1024;
+const CHUNK_SIZE = 16 * 1024;
 
 export function getMaxFileSize(): number {
   return MAX_FILE_SIZE;

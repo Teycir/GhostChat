@@ -148,6 +148,7 @@ export default function ChatCore({ invitePeerId }: ChatCoreProps) {
         }
         const fileData = deserializeFileMessage(data);
         if (fileData) {
+          console.log(`[FILE] Received file: ${fileData.name}, size: ${fileData.size} bytes`);
           const id = crypto.randomUUID();
           storeMessage({ id, text: "", peerId: fromPeerId, isSelf: false, file: fileData });
           setMessages(getMessages().slice());
@@ -371,7 +372,9 @@ export default function ChatCore({ invitePeerId }: ChatCoreProps) {
         const stripped = await stripImageMetadata(file);
         const blob = await fetch(stripped).then(r => r.blob());
         processedFile = new File([blob], file.name, { type: file.type });
-      } catch {}
+      } catch (err) {
+        console.error('[FILE] Metadata stripping failed:', err);
+      }
     }
 
     const result = await fileToBase64(processedFile);
@@ -385,18 +388,26 @@ export default function ChatCore({ invitePeerId }: ChatCoreProps) {
     setMessages(getMessages().slice());
 
     const chunks = serializeFileMessage(result.fileData!);
+    console.log(`[FILE] Sending ${file.name}: ${chunks.length} chunks, total size: ${result.fileData!.data.length} bytes`);
 
     if (connected) {
       setUploadProgress({ fileName: file.name, sent: 0, total: chunks.length });
-      chunks.forEach((chunk, i) => {
-        sendToAll(chunk);
-        setUploadProgress({
-          fileName: file.name,
-          sent: i + 1,
-          total: chunks.length,
+      try {
+        chunks.forEach((chunk, i) => {
+          console.log(`[FILE] Sending chunk ${i + 1}/${chunks.length}, size: ${chunk.length} bytes`);
+          sendToAll(chunk);
+          setUploadProgress({
+            fileName: file.name,
+            sent: i + 1,
+            total: chunks.length,
+          });
         });
-      });
-      setTimeout(() => setUploadProgress(null), 2000);
+        setTimeout(() => setUploadProgress(null), 2000);
+      } catch (err) {
+        console.error('[FILE] Send failed:', err);
+        setError('Failed to send file. Try a smaller file.');
+        setUploadProgress(null);
+      }
     } else {
       setMessageQueue((prev) => [...prev, ...chunks]);
     }
