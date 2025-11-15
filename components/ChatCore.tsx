@@ -61,8 +61,11 @@ export default function ChatCore({ invitePeerId }: ChatCoreProps) {
     total: number;
   } | null>(null);
   const [isTyping, setIsTyping] = useState(false);
+  const [latency, setLatency] = useState<number | undefined>(undefined);
+  const [searchQuery, setSearchQuery] = useState("");
 
   const initialized = React.useRef(false);
+  const peerConnection = React.useRef<any>(null);
   const startTime = React.useRef(Date.now());
   const typingTimeout = React.useRef<NodeJS.Timeout | null>(null);
   const connectionTimeout = React.useRef<NodeJS.Timeout | null>(null);
@@ -108,7 +111,7 @@ export default function ChatCore({ invitePeerId }: ChatCoreProps) {
         playNotificationSound();
       };
 
-      const handleConnect = () => {
+      const handleConnect = (peer?: any) => {
         setConnected(true);
         setConnecting(false);
         initAudioContext();
@@ -120,11 +123,16 @@ export default function ChatCore({ invitePeerId }: ChatCoreProps) {
           prev.forEach((msg) => sendToAll(msg));
           return [];
         });
+        if (peer) {
+          peerConnection.current = peer;
+        }
       };
 
       const handleDisconnect = (reason?: string) => {
         setConnected(false);
         setConnecting(false);
+        setLatency(undefined);
+        peerConnection.current = null;
         destroy();
         setTimeout(() => {
           window.location.href = '/chat';
@@ -173,8 +181,21 @@ export default function ChatCore({ invitePeerId }: ChatCoreProps) {
       };
       document.addEventListener("visibilitychange", handleVisibilityChange);
 
+      const latencyInterval = setInterval(() => {
+        if (connected && peerConnection.current && peerConnection.current._pc) {
+          peerConnection.current._pc.getStats().then((stats: any) => {
+            stats.forEach((report: any) => {
+              if (report.type === 'candidate-pair' && report.state === 'succeeded') {
+                setLatency(report.currentRoundTripTime ? Math.round(report.currentRoundTripTime * 1000) : undefined);
+              }
+            });
+          }).catch(() => {});
+        }
+      }, 2000);
+
       return () => {
         clearInterval(uptimeInterval);
+        clearInterval(latencyInterval);
         destroy();
         clearSession();
         document.removeEventListener(
@@ -292,7 +313,7 @@ export default function ChatCore({ invitePeerId }: ChatCoreProps) {
         </div>
       </div>
       <div style={{ padding: "0 16px 16px" }}>
-        <ConnectionStatus connected={connected} connecting={connecting} />
+        <ConnectionStatus connected={connected} connecting={connecting} latency={latency} />
         <InviteSection
           peerId={peerId}
           inviteLink={inviteLink}
@@ -301,7 +322,27 @@ export default function ChatCore({ invitePeerId }: ChatCoreProps) {
       </div>
 
       <div style={{ flex: 1, overflow: "auto", padding: 16 }}>
-        <MessageList messages={messages} />
+        {messages.length > 0 && (
+          <div style={{ marginBottom: 12, position: "sticky", top: 0, background: "#000", paddingBottom: 8, zIndex: 10 }}>
+            <input
+              type="text"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              placeholder="Search messages..."
+              style={{
+                width: "100%",
+                padding: "6px 12px",
+                background: "#111",
+                border: "1px solid #333",
+                borderRadius: 6,
+                color: "#fff",
+                fontSize: 11,
+                outline: "none",
+              }}
+            />
+          </div>
+        )}
+        <MessageList messages={messages} searchQuery={searchQuery} />
         {isTyping && (
           <div style={{ opacity: 0.6, fontSize: 11, fontStyle: "italic" }}>
             Peer is typing...

@@ -1,5 +1,29 @@
 # Changelog
 
+## [0.5.0] - 2025-01-16
+
+### Added
+- **Quick Emoji Picker**: 15 one-click emoji buttons inline with message input
+- **Markdown Formatting**: 16 formatting buttons (H1-H3, Bold, Italic, Underline, Strikethrough, Highlight, Code, Code Block, Link, Image, Superscript, Subscript, HR, Table)
+- **Message Search**: Real-time search with yellow highlighting, sticky search bar, case-insensitive filtering
+- **Connection Quality Indicator**: Live latency display with color-coded signal (green <100ms, yellow 100-300ms, orange >300ms)
+- **Notification Sound**: 800Hz beep (0.15s) plays on message receive using Web Audio API
+- **Cross-Browser Tooltips**: Custom CSS tooltips using data-title attribute (no double tooltips in Chromium)
+
+### Changed
+- **Markdown Parser**: Code and code blocks now display in green (#0f0) on dark background
+- **Search Implementation**: Parses markdown before highlighting to avoid showing raw syntax
+- **Audio Context**: Resets on each connection for reliability after reconnections
+
+### Technical
+- Created `lib/markdown.ts` with parseMarkdown() supporting 16 formats
+- Created `lib/notification-sound.ts` with Web Audio API implementation
+- Added WebRTC stats polling (2s interval) for RTT/latency measurement
+- Implemented text wrapping function for markdown button insertions
+- Added custom tooltip styles in globals.css with ::after and ::before pseudo-elements
+
+---
+
 ## [0.4.1] - 2025-01-15
 
 ### Added

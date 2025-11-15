@@ -17,14 +17,28 @@ interface Message {
 
 interface MessageListProps {
   messages: Message[];
+  searchQuery?: string;
 }
 
-export default function MessageList({ messages }: MessageListProps) {
+export default function MessageList({ messages, searchQuery = "" }: MessageListProps) {
   const endRef = useRef<HTMLDivElement>(null);
 
+  const filteredMessages = searchQuery
+    ? messages.filter((msg) => msg.text.toLowerCase().includes(searchQuery.toLowerCase()))
+    : messages;
+
+  const highlightText = (text: string) => {
+    const parsed = parseMarkdown(text);
+    if (!searchQuery) return parsed;
+    const regex = new RegExp(`(${searchQuery.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')})`, 'gi');
+    return parsed.replace(regex, '<mark style="background: #ff0; color: #000">$1</mark>');
+  };
+
   useEffect(() => {
-    endRef.current?.scrollIntoView({ behavior: "smooth" });
-  }, [messages]);
+    if (!searchQuery) {
+      endRef.current?.scrollIntoView({ behavior: "smooth" });
+    }
+  }, [messages, searchQuery]);
 
   if (messages.length === 0) {
     return (
@@ -34,9 +48,17 @@ export default function MessageList({ messages }: MessageListProps) {
     );
   }
 
+  if (searchQuery && filteredMessages.length === 0) {
+    return (
+      <div style={{ textAlign: "center", opacity: 0.5, marginTop: 40 }}>
+        No messages found for "{searchQuery}"
+      </div>
+    );
+  }
+
   return (
     <>
-      {messages.map((msg, i) => (
+      {filteredMessages.map((msg, i) => (
         <div
           key={i}
           style={{
@@ -97,7 +119,7 @@ export default function MessageList({ messages }: MessageListProps) {
             ) : msg.text ? (
               <span
                 dangerouslySetInnerHTML={{
-                  __html: parseMarkdown(msg.text),
+                  __html: highlightText(msg.text),
                 }}
               />
             ) : null}

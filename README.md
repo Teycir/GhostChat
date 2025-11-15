@@ -68,6 +68,8 @@ GhostChat is a truly private chat app where messages travel directly between you
 - **Direct P2P**: Messages and files never touch servers
 - **Markdown Support**: Rich text formatting (bold, italic, code, links, images, etc.)
 - **Quick Emojis**: 15 one-click emoji buttons
+- **Message Search**: Find messages in current session with highlighting
+- **Connection Quality**: Real-time latency indicator
 - **Sound Notifications**: Audio alert on new messages
 - **Typing Indicators**: See when peer is typing
 - **Clickable Links**: URLs automatically become clickable
@@ -403,6 +405,8 @@ Yes, that's how P2P works. Use a VPN to mask your IP if needed.
 
 - Quick emoji picker (15 emojis inline)
 - Markdown formatting (16 buttons: H1-H3, Bold, Italic, Underline, Strikethrough, Highlight, Code, Code Block, Link, Image, Superscript, Subscript, HR, Table)
+- Message search (real-time filtering with yellow highlighting)
+- Connection quality indicator (latency display with color-coded signal)
 - Notification sound on message receive
 - Cross-browser tooltips (Firefox + Chromium)
 - Typing indicators ("Peer is typing...")
