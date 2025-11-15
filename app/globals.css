@@ -50,3 +50,41 @@ body {
 .tooltip-btn:hover::before {
   opacity: 1;
 }
+
+.tooltip-btn-bottom[data-title]::after {
+  content: attr(data-title);
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 4px 8px;
+  background: #333;
+  color: #fff;
+  font-size: 10px;
+  white-space: nowrap;
+  border-radius: 4px;
+  margin-top: 4px;
+  pointer-events: none;
+  z-index: 1000;
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+
+.tooltip-btn-bottom[data-title]::before {
+  content: '';
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  border: 4px solid transparent;
+  border-bottom-color: #333;
+  pointer-events: none;
+  z-index: 1000;
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+
+.tooltip-btn-bottom:hover::after,
+.tooltip-btn-bottom:hover::before {
+  opacity: 1;
+}

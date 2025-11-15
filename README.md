@@ -66,21 +66,28 @@ GhostChat is a truly private chat app where messages travel directly between you
 ### Key Features
 
 - **Direct P2P**: Messages and files never touch servers
-- **Markdown Support**: Rich text formatting (bold, italic, code, links, images, etc.)
+- **Self-Destructing Messages**: Auto-delete after 5s, 30s, 1m, or 5m
+- **Message Deletion**: Delete messages for both sides with sync
+- **Read Receipts**: Single/double checkmark delivery status
+- **Panic Button**: Clear all messages instantly (Ctrl+Shift+X)
+- **Sensitive Content Blur**: Auto-blur passwords, SSN, credit cards
+- **Connection Fingerprint**: Emoji verification to prevent MITM
+- **Clipboard Auto-Clear**: Copied text cleared after 10 seconds
+- **Metadata Stripping**: Remove EXIF data from images
+- **Memory Overwrite**: Anti-forensics random data overwrite
+- **Message Limit**: Configurable max messages (10, 25, 50, 100)
+- **Markdown Support**: Rich text formatting (16 buttons)
 - **Quick Emojis**: 15 one-click emoji buttons
-- **Message Search**: Find messages in current session with highlighting
-- **Connection Quality**: Real-time latency indicator
+- **Message Search**: Real-time filtering with highlighting
+- **Connection Quality**: Live latency indicator
 - **Sound Notifications**: Audio alert on new messages
 - **Typing Indicators**: See when peer is typing
-- **Clickable Links**: URLs automatically become clickable
 - **File Sharing**: Send files up to 10MB directly P2P
 - **Memory-only**: RAM storage, auto-wipe on tab close
 - **Ephemeral**: New identity each session, no history
 - **Auto-blur**: Screen protection when switching tabs
-- **No accounts**: No signup, email, or phone number
 - **Zero tracking**: No analytics, logs, or user data
 - **Open source**: Fully auditable code
-- **Works everywhere**: Desktop, mobile, any browser
 
 ### Example Scenarios
 
@@ -401,21 +408,25 @@ Yes, that's how P2P works. Use a VPN to mask your IP if needed.
 **Cost**: $0 forever (free tier infrastructure)  
 **Capacity**: 200,000 requests/day (~10,000 chat sessions)
 
-**✨ v0.5.0 Features**:
+**✨ v0.6.0 Features**:
 
-- Quick emoji picker (15 emojis inline)
-- Markdown formatting (16 buttons: H1-H3, Bold, Italic, Underline, Strikethrough, Highlight, Code, Code Block, Link, Image, Superscript, Subscript, HR, Table)
-- Message search (real-time filtering with yellow highlighting)
-- Connection quality indicator (latency display with color-coded signal)
-- Notification sound on message receive
-- Cross-browser tooltips (Firefox + Chromium)
-- Typing indicators ("Peer is typing...")
-- Auto-scroll to latest message
-- Clickable URLs in messages
-- Character counter (500 max)
-- Click message to copy text
-- Improved disconnect handling
-- Faster disconnect detection (1-2 seconds)
+- Self-destructing messages (5s, 30s, 1m, 5m timers)
+- Message deletion synced across peers
+- Read receipts (single/double checkmark)
+- Panic button with keyboard shortcut (Ctrl+Shift+X)
+- Sensitive content auto-blur (passwords, SSN, credit cards)
+- Connection fingerprint verification (4-emoji hash)
+- Clipboard auto-clear after 10 seconds
+- EXIF metadata stripping from images
+- Anti-forensics memory overwrite on delete
+- Configurable message limit (10, 25, 50, 100)
+- Quick emoji picker (15 emojis)
+- Markdown formatting (16 buttons)
+- Message search with highlighting
+- Connection quality indicator
+- Notification sound
+- Typing indicators
+- Read receipts
 
 **⚠️ Limitations**:
 

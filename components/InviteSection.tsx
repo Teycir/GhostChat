@@ -80,10 +80,10 @@ export default function InviteSection({
                   }}
                   style={{
                     padding: "6px 12px",
-                    background: copied ? "#0f0" : "#fff",
+                    background: copied ? "#2d5" : "#fff",
                     border: "none",
                     borderRadius: 6,
-                    color: "#000",
+                    color: copied ? "#fff" : "#000",
                     fontSize: 10,
                     cursor: "pointer",
                     fontWeight: 600,

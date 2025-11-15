@@ -1,5 +1,38 @@
 # Changelog
 
+## [0.6.0] - 2025-01-17
+
+### Added - Privacy & Security Features
+- **Self-Destructing Messages**: Timer dropdown (5s, 30s, 1m, 5m, Never) with countdown display
+- **Message Deletion**: Delete button on each message, synced P2P deletion for both sides
+- **Read Receipts**: Single checkmark (sent), double checkmark (read) on messages
+- **Panic Button**: Red button in header + Ctrl+Shift+X keyboard shortcut to clear all messages
+- **Sensitive Content Blur**: Auto-detect and blur passwords, SSN, credit cards, API keys, secrets
+- **Connection Fingerprint**: 4-emoji hash displayed to verify no MITM attack
+- **Clipboard Auto-Clear**: Copied messages auto-cleared from clipboard after 10 seconds
+- **Metadata Stripping**: EXIF data removed from images via canvas re-encoding
+- **Anti-Forensics Memory Overwrite**: Deleted messages overwritten with random data
+- **Message Limit**: Dropdown to set max messages (10, 25, 50, 100) with auto-cleanup
+
+### Changed
+- **Message Interface**: Added id, read, expiresAt, createdAt, sensitive fields
+- **Storage**: Implements memory overwrite on delete, limit enforcement, beforeunload cleanup
+- **Copy Behavior**: Messages now use clipboard manager with auto-clear
+- **Tooltips**: All tooltips use custom CSS (no native title attributes)
+- **Panic Button**: Centered in header with bold styling
+
+### Technical
+- Created `lib/sensitive-content.ts` - Regex patterns for sensitive data detection
+- Created `lib/connection-fingerprint.ts` - Deterministic emoji hash generator
+- Created `lib/clipboard-manager.ts` - Auto-clearing clipboard utility
+- Created `lib/metadata-stripper.ts` - Canvas-based EXIF removal
+- Enhanced `lib/storage.ts` with overwriteMemory(), setMaxMessages(), createdAt tracking
+- Added message protocol: delete, read, panic, message types
+- Implemented expiry checking interval (1s) for self-destruct
+- Added keyboard event listener for panic shortcut
+
+---
+
 ## [0.5.0] - 2025-01-16
 
 ### Added

@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { getMessages, storeMessage } from "@/lib/storage";
+import { getMessages, storeMessage, deleteMessage, markAsRead, setMaxMessages } from "@/lib/storage";
 import {
   initPeer,
   connectToPeer,
@@ -20,6 +20,9 @@ import {
   serializeFileMessage,
 } from "@/lib/file-transfer";
 import { playNotificationSound, initAudioContext } from "@/lib/notification-sound";
+import { containsSensitiveContent } from "@/lib/sensitive-content";
+import { generateFingerprint } from "@/lib/connection-fingerprint";
+import { stripImageMetadata } from "@/lib/metadata-stripper";
 import ErrorHandler from "./ErrorHandler";
 import ConnectionStatus from "./ConnectionStatus";
 import InviteSection from "./InviteSection";
@@ -33,9 +36,14 @@ interface ChatCoreProps {
 }
 
 interface Message {
+  id: string;
   text: string;
   peerId: string;
   isSelf: boolean;
+  read?: boolean;
+  expiresAt?: number;
+  createdAt?: number;
+  sensitive?: boolean;
   file?: {
     name: string;
     size: number;
@@ -63,6 +71,10 @@ export default function ChatCore({ invitePeerId }: ChatCoreProps) {
   const [isTyping, setIsTyping] = useState(false);
   const [latency, setLatency] = useState<number | undefined>(undefined);
   const [searchQuery, setSearchQuery] = useState("");
+  const [selfDestructTimer, setSelfDestructTimer] = useState<number>(0);
+  const [messageLimit, setMessageLimit] = useState<number>(50);
+  const [remotePeerId, setRemotePeerId] = useState<string>("");
+  const [fingerprint, setFingerprint] = useState<string>("");
 
   const initialized = React.useRef(false);
   const peerConnection = React.useRef<any>(null);
@@ -91,22 +103,43 @@ export default function ChatCore({ invitePeerId }: ChatCoreProps) {
           typingTimeout.current = setTimeout(() => setIsTyping(false), 3000);
           return;
         }
+        try {
+          const parsed = JSON.parse(data);
+          if (parsed.type === "delete") {
+            deleteMessage(parsed.id);
+            setMessages(getMessages().slice());
+            return;
+          }
+          if (parsed.type === "read") {
+            markAsRead(parsed.id);
+            setMessages(getMessages().slice());
+            return;
+          }
+          if (parsed.type === "message") {
+            const expiresAt = parsed.expiresAt ? parsed.expiresAt : undefined;
+            const sensitive = containsSensitiveContent(parsed.text);
+            storeMessage({ id: parsed.id, text: parsed.text, peerId: fromPeerId, isSelf: false, expiresAt, sensitive });
+            setMessages(getMessages().slice());
+            playNotificationSound();
+            sendToAll(JSON.stringify({ type: "read", id: parsed.id }));
+            return;
+          }
+          if (parsed.type === "panic") {
+            getMessages().forEach(m => deleteMessage(m.id));
+            setMessages([]);
+            return;
+          }
+          if (parsed.type === "file-chunk" || parsed.type === "file") return;
+        } catch {}
         const fileData = deserializeFileMessage(data);
         if (fileData) {
-          storeMessage({
-            text: "",
-            peerId: fromPeerId,
-            isSelf: false,
-            file: fileData,
-          });
+          const id = crypto.randomUUID();
+          storeMessage({ id, text: "", peerId: fromPeerId, isSelf: false, file: fileData });
           setMessages(getMessages().slice());
           return;
         }
-        try {
-          const parsed = JSON.parse(data);
-          if (parsed.type === "file-chunk" || parsed.type === "file") return;
-        } catch {}
-        storeMessage({ text: data, peerId: fromPeerId, isSelf: false });
+        const id = crypto.randomUUID();
+        storeMessage({ id, text: data, peerId: fromPeerId, isSelf: false });
         setMessages(getMessages().slice());
         playNotificationSound();
       };
@@ -125,6 +158,11 @@ export default function ChatCore({ invitePeerId }: ChatCoreProps) {
         });
         if (peer) {
           peerConnection.current = peer;
+          const remote = peer.peer || invitePeerId || '';
+          setRemotePeerId(remote);
+          if (peerId && remote) {
+            setFingerprint(generateFingerprint(peerId, remote));
+          }
         }
       };
 
@@ -193,15 +231,38 @@ export default function ChatCore({ invitePeerId }: ChatCoreProps) {
         }
       }, 2000);
 
+      const expiryInterval = setInterval(() => {
+        const now = Date.now();
+        const msgs = getMessages();
+        let changed = false;
+        msgs.forEach(msg => {
+          if (msg.expiresAt && msg.expiresAt <= now) {
+            deleteMessage(msg.id);
+            if (connected) sendToAll(JSON.stringify({ type: "delete", id: msg.id }));
+            changed = true;
+          }
+        });
+        if (changed) setMessages(getMessages().slice());
+      }, 1000);
+
+      const handlePanic = (e: KeyboardEvent) => {
+        if (e.ctrlKey && e.shiftKey && e.key === 'X') {
+          e.preventDefault();
+          getMessages().forEach(m => deleteMessage(m.id));
+          setMessages([]);
+          if (connected) sendToAll(JSON.stringify({ type: "panic" }));
+        }
+      };
+      document.addEventListener('keydown', handlePanic);
+
       return () => {
         clearInterval(uptimeInterval);
         clearInterval(latencyInterval);
+        clearInterval(expiryInterval);
         destroy();
         clearSession();
-        document.removeEventListener(
-          "visibilitychange",
-          handleVisibilityChange,
-        );
+        document.removeEventListener('visibilitychange', handleVisibilityChange);
+        document.removeEventListener('keydown', handlePanic);
       };
     })();
   }, []);
@@ -220,13 +281,16 @@ export default function ChatCore({ invitePeerId }: ChatCoreProps) {
       return;
     }
 
-    storeMessage({ text: input, peerId, isSelf: true });
+    const id = crypto.randomUUID();
+    const expiresAt = selfDestructTimer > 0 ? Date.now() + selfDestructTimer * 1000 : undefined;
+    const sensitive = containsSensitiveContent(input);
+    storeMessage({ id, text: input, peerId, isSelf: true, expiresAt, sensitive });
     setMessages(getMessages().slice());
 
     if (connected) {
-      sendToAll(input);
+      sendToAll(JSON.stringify({ type: "message", id, text: input, expiresAt }));
     } else {
-      setMessageQueue((prev) => [...prev, input]);
+      setMessageQueue((prev) => [...prev, JSON.stringify({ type: "message", id, text: input, expiresAt })]);
     }
 
     setInput("");
@@ -236,13 +300,23 @@ export default function ChatCore({ invitePeerId }: ChatCoreProps) {
     const file = e.target.files?.[0];
     if (!file) return;
 
-    const result = await fileToBase64(file);
+    let processedFile = file;
+    if (file.type.startsWith('image/')) {
+      try {
+        const stripped = await stripImageMetadata(file);
+        const blob = await fetch(stripped).then(r => r.blob());
+        processedFile = new File([blob], file.name, { type: file.type });
+      } catch {}
+    }
+
+    const result = await fileToBase64(processedFile);
     if (!result.success) {
       setError(result.error || "Failed to process file");
       return;
     }
 
-    storeMessage({ text: "", peerId, isSelf: true, file: result.fileData });
+    const id = crypto.randomUUID();
+    storeMessage({ id, text: "", peerId, isSelf: true, file: result.fileData });
     setMessages(getMessages().slice());
 
     const chunks = serializeFileMessage(result.fileData!);
@@ -302,18 +376,49 @@ export default function ChatCore({ invitePeerId }: ChatCoreProps) {
           padding: 16,
           borderBottom: "1px solid #333",
           display: "flex",
-          justifyContent: "space-between",
+          justifyContent: "center",
           alignItems: "center",
+          position: "relative",
         }}
       >
-        <div>
+        <div style={{ position: "absolute", left: 16 }}>
           <div style={{ fontSize: 12, opacity: 0.6 }}>
             Your ID: {peerId.slice(0, 8)}...
           </div>
         </div>
+        <button
+          onClick={() => {
+            getMessages().forEach(m => deleteMessage(m.id));
+            setMessages([]);
+            if (connected) sendToAll(JSON.stringify({ type: "panic" }));
+          }}
+          className="tooltip-btn-bottom"
+          data-title="Panic: Clear all messages (Ctrl+Shift+X)"
+          style={{
+            position: "relative",
+            background: "#f00",
+            color: "#fff",
+            border: "none",
+            borderRadius: 6,
+            padding: "8px 24px",
+            fontSize: 12,
+            cursor: "pointer",
+            fontWeight: 700,
+            letterSpacing: "0.5px",
+          }}
+        >
+          🚨 PANIC
+        </button>
       </div>
       <div style={{ padding: "0 16px 16px" }}>
         <ConnectionStatus connected={connected} connecting={connecting} latency={latency} />
+        {fingerprint && (
+          <div style={{ marginTop: 8, padding: 8, background: "#1a1a1a", borderRadius: 6, fontSize: 10, textAlign: "center" }}>
+            <span style={{ opacity: 0.6 }}>Connection fingerprint: </span>
+            <span style={{ fontSize: 16, letterSpacing: 2 }}>{fingerprint}</span>
+            <div style={{ opacity: 0.5, fontSize: 9, marginTop: 4 }}>Verify peer sees same fingerprint</div>
+          </div>
+        )}
         <InviteSection
           peerId={peerId}
           inviteLink={inviteLink}
@@ -342,7 +447,15 @@ export default function ChatCore({ invitePeerId }: ChatCoreProps) {
             />
           </div>
         )}
-        <MessageList messages={messages} searchQuery={searchQuery} />
+        <MessageList 
+          messages={messages} 
+          searchQuery={searchQuery}
+          onDelete={(id) => {
+            deleteMessage(id);
+            setMessages(getMessages().slice());
+            if (connected) sendToAll(JSON.stringify({ type: "delete", id }));
+          }}
+        />
         {isTyping && (
           <div style={{ opacity: 0.6, fontSize: 11, fontStyle: "italic" }}>
             Peer is typing...
@@ -351,6 +464,56 @@ export default function ChatCore({ invitePeerId }: ChatCoreProps) {
       </div>
 
       {uploadProgress && <UploadProgress {...uploadProgress} />}
+      <div style={{ borderTop: "1px solid #333", padding: "8px 16px", display: "flex", gap: 12, alignItems: "center", flexWrap: "wrap" }}>
+        <div style={{ display: "flex", gap: 6, alignItems: "center" }}>
+          <label style={{ fontSize: 10, opacity: 0.6, whiteSpace: "nowrap" }}>Self-destruct:</label>
+          <select
+            value={selfDestructTimer}
+            onChange={(e) => setSelfDestructTimer(Number(e.target.value))}
+            style={{
+              background: "#111",
+              color: "#fff",
+              border: "1px solid #333",
+              borderRadius: 4,
+              padding: "4px 8px",
+              fontSize: 10,
+              cursor: "pointer",
+            }}
+          >
+            <option value={0}>Never</option>
+            <option value={5}>5s</option>
+            <option value={30}>30s</option>
+            <option value={60}>1m</option>
+            <option value={300}>5m</option>
+          </select>
+        </div>
+        <div style={{ display: "flex", gap: 6, alignItems: "center" }}>
+          <label style={{ fontSize: 10, opacity: 0.6, whiteSpace: "nowrap" }}>Max messages:</label>
+          <select
+            value={messageLimit}
+            onChange={(e) => {
+              const limit = Number(e.target.value);
+              setMessageLimit(limit);
+              setMaxMessages(limit);
+              setMessages(getMessages().slice());
+            }}
+            style={{
+              background: "#111",
+              color: "#fff",
+              border: "1px solid #333",
+              borderRadius: 4,
+              padding: "4px 8px",
+              fontSize: 10,
+              cursor: "pointer",
+            }}
+          >
+            <option value={10}>10</option>
+            <option value={25}>25</option>
+            <option value={50}>50</option>
+            <option value={100}>100</option>
+          </select>
+        </div>
+      </div>
       <MessageInput
         input={input}
         setInput={setInput}
