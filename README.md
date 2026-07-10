@@ -110,7 +110,7 @@ Most "secure" messaging apps still store your messages on servers. Even Signal a
 | **No logs**                  | ✅ Yes    | ✅ Yes      | ✅ Yes      | ❌ No       | ❌ No       | ❌ No       |
 | **Self-destruct**            | ✅ Yes    | ✅ Yes      | ❌ No       | ✅ Yes      | ❌ No       | ✅ Yes      |
 | **Open source**              | ✅ Yes    | ✅ Yes      | ✅ Yes      | ✅ Yes      | ❌ No       | ❌ Partial  |
-| **Web-based**                | ✅ Yes    | ❌ App only | ❌ App only | ❌ App only | ✅ Yes      | ✅ Yes      |
+| **Web-based**                | ✅ Yes    | ❌ App only | ❌ App only | ❌ Requires mobile app | ✅ Yes      | ✅ Yes      |
 | **Cost**                     | 💰 Free   | 💰 Free     | 💰 Free     | 💰 Free     | 💰 Free     | 💰 Free     |
 
 ---
