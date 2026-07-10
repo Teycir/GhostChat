@@ -94,6 +94,7 @@ Most "secure" messaging apps still store your messages on servers. Even Signal a
 - ✅ **No accounts** - No phone numbers, emails, or persistent identity
 - ✅ **Self-destructing** - Messages auto-delete after 5s, 30s, 1m, or 5m
 - ✅ **Open source** - Fully auditable code (MIT license)
+- ✅ **Censorship-resistant** - Web-based, no app stores, can't be delisted by Apple/Google
 
 **Perfect for:** Journalists, whistleblowers, activists, lawyers, executives, or anyone who values true privacy.
 
