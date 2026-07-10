@@ -101,15 +101,16 @@ Most "secure" messaging apps still store your messages on servers. Even Signal a
 
 ## 📊 Comparison
 
-| Feature                      | GhostChat | Signal      | WhatsApp    | Telegram    |
-| ---------------------------- | --------- | ----------- | ----------- | ----------- |
-| **True P2P**                 | ✅ Yes    | ❌ No       | ❌ No       | ❌ No       |
-| **No server storage**        | ✅ Yes    | ❌ Metadata | ❌ Metadata | ❌ Messages |
-| **Does not require account** | ✅ Yes    | ❌ Phone    | ❌ Phone    | ❌ Phone    |
-| **No logs**                  | ✅ Yes    | ❌ No       | ❌ No       | ❌ No       |
-| **Self-destruct**            | ✅ Yes    | ✅ Yes      | ❌ No       | ✅ Yes      |
-| **Open source**              | ✅ Yes    | ✅ Yes      | ❌ No       | ❌ Partial  |
-| **Cost**                     | 💰 Free   | 💰 Free     | 💰 Free     | 💰 Free     |
+| Feature                      | GhostChat | SimpleX     | Briar       | Signal      | WhatsApp    | Telegram    |
+| ---------------------------- | --------- | ----------- | ----------- | ----------- | ----------- | ----------- |
+| **True P2P**                 | ✅ Yes    | ❌ Relay    | ✅ Yes      | ❌ No       | ❌ No       | ❌ No       |
+| **No server storage**        | ✅ Yes    | ✅ Yes      | ✅ Yes      | ❌ Metadata | ❌ Metadata | ❌ Messages |
+| **Does not require account** | ✅ Yes    | ✅ Yes      | ✅ Yes      | ❌ Phone    | ❌ Phone    | ❌ Phone    |
+| **No logs**                  | ✅ Yes    | ✅ Yes      | ✅ Yes      | ❌ No       | ❌ No       | ❌ No       |
+| **Self-destruct**            | ✅ Yes    | ✅ Yes      | ❌ No       | ✅ Yes      | ❌ No       | ✅ Yes      |
+| **Open source**              | ✅ Yes    | ✅ Yes      | ✅ Yes      | ✅ Yes      | ❌ No       | ❌ Partial  |
+| **Web-based**                | ✅ Yes    | ❌ App only | ❌ App only | ❌ App only | ✅ Yes      | ✅ Yes      |
+| **Cost**                     | 💰 Free   | 💰 Free     | 💰 Free     | 💰 Free     | 💰 Free     | 💰 Free     |
 
 ---
 
